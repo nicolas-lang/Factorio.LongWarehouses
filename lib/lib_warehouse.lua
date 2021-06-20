@@ -252,7 +252,7 @@ function lib_warehouse.buildSpriteLayer(baseName,entityType,unitSize,direction)
 		})
 	--log(serpent.block( layers, {comment = false, numformat = '%1.8g', compact = true } ))
 	return util.table.deepcopy(layers)
-end	
+end
 --=================================================================================--
 function lib_warehouse.checkEntityName(name)
 	log("checking name " .. name)
