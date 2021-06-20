@@ -2,3 +2,4 @@
 .gitignore export-ignore
 .github export-ignore
 Readme.md export-ignore
+*.ps1 export-ignore

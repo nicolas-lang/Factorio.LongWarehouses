@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+  Major Features:
+    - Complete refactoring
+    - Changed Circuit connector logic to use composite entitys
+    - A lot Control code to manage composite entitys
+    - Split Tanks into their own mod
+---------------------------------------------------------------------------------------------------
 Version: 0.0.1
   Major Features:
     - Initial release.
