@@ -1,4 +1,4 @@
-if active_mods["Krastorio2"] and false then
+if mods["Krastorio2"] and false then
 	log("K2 compatibility not yet implemented")
 --[[
 	table.insert(whTechLogistic1.prerequisites, "kr-logistic-containers-1")
