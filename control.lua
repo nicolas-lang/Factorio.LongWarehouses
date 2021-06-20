@@ -43,24 +43,30 @@ function myControl.validate_warehouse_member(subEntityName)
 			debugMsg("invalid surface")
 			break
 		end
-		local searchResult
-		searchResult = surface.find_entities_filtered({force = force, name = subEntityName})
-		debugMsg("found " .. tostring(#searchResult) .. " entities")
-		for _, ent in pairs(searchResult) do
-			myControl.validate_warehouse(ent.position,ent.force,ent.surface,false)
-		end
-		searchResult = surface.find_entities_filtered({force = force, ghost_name = subEntityName})
-		debugMsg("found " .. tostring(#searchResult) .. " entity-ghosts")
-		for _, ent in pairs(searchResult) do
-			myControl.validate_warehouse(ent.position,ent.force,ent.surface,false)
+		for _, force in pairs(game.forces) do
+			if not force or not force.valid then
+				debugMsg("invalid force")
+				break
+			end
+			local searchResult
+			searchResult = surface.find_entities_filtered({force = force, name = subEntityName})
+			debugMsg("found " .. tostring(#searchResult) .. " entities")
+			for _, ent in pairs(searchResult) do
+				myControl.validate_warehouse(ent.position,ent.force,ent.surface,false)
+			end
+			searchResult = surface.find_entities_filtered({force = force, ghost_name = subEntityName})
+			debugMsg("found " .. tostring(#searchResult) .. " entity-ghosts")
+			for _, ent in pairs(searchResult) do
+				myControl.validate_warehouse(ent.position,ent.force,ent.surface,false)
+			end
 		end
 	end
 end
 -------------------------------------------------------------------------------------
 function myControl.validate_warehouse(position,force,surface,deconstructing)
 	debugMsg("validating warehouse composite entity")
-	local last_user
 	local searchResult
+	local whEntity
 	local whEntityType
 	local whType
 	local poleEntity
@@ -94,7 +100,6 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 		poleEntity.destroy()
 		return
 	end
-	
 	-- every warehouse needs a pole
 	if whEntityType == 'entity' and not poleEntity then
 		debugMsg("created new warehouse connector")
@@ -118,14 +123,14 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 		}
 		poleEntityType = 'entity-ghost'
 	end
-	
+
 	-- ghost state of warehouse and pole is synchronized, the pole is never manually built, but rather scripted
 	if whEntityType == 'entity' and poleEntityType == 'entity-ghost' then
 		debugMsg("revived warehouse connector ghost")
 		_, poleEntity = poleEntity.revive()
 		poleEntityType = "entity"
 	end
-	
+
 	-- a wh ghost is always a proxy and never a direction typed wh (this only happens with strg-z, which also breakes pole connections, but there is no fix)
 	if whEntityType == 'entity-ghost' and data_util.has_value({"horizontal","vertical"}, whType) then
 		debugMsg("warning, using undo will break wire connections of the warehouse connector")
@@ -235,7 +240,7 @@ end
 function myControl.on_entity_removed(event)
 	debugMsg("OnEntityRemoved")
 	local entity = event.entity
-	if not entity or not entity.valid then 
+	if not entity or not entity.valid then
 		debugMsg("OnEntityRemoved - entity not defined")
 		return
 	end
@@ -252,11 +257,11 @@ end
 function myControl.on_entity_died(event)
 	debugMsg("OnEntityDied")
 	local entity = event.entity
-	if not entity or not entity.valid then 
+	if not entity or not entity.valid then
 		debugMsg("OnEntityDied - entity not defined")
 		return
 	end
-	
+
 	local entity = event.entity
 	_ , whType = lib_warehouse.checkEntity(entity)
 	if whType then

@@ -29,7 +29,7 @@ end
 -------------------------------------------------------------------------------------
 function data_util.getTechnologyFromName(technology_name)
 	for name, technology in pairs(data.raw.technology) do
-		if name == technology_name then 
+		if name == technology_name then
 			return technology
 		end
 	end

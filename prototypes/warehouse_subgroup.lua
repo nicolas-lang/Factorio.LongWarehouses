@@ -1,4 +1,4 @@
-if not data.raw["item-subgroup"]["cust-warehouse"] then 
+if not data.raw["item-subgroup"]["cust-warehouse"] then
 	data:extend({
 		{
 			type = "item-subgroup",

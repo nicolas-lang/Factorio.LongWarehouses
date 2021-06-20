@@ -8,10 +8,10 @@ ghost_util.ghostcount = 0
 -------------------------------------------------------------------------------
 function ghost_util.init(lib_event,check_interval,check_limit)
 	--ghost_util.lib_event = lib_event
-	if check_interval == nil then 
+	if check_interval == nil then
 		check_interval = 20
 	end
-	if check_limit ~= nil then 
+	if check_limit ~= nil then
 		ghost_util.check_limit = check_limit
 	end
 	script.on_nth_tick(120,ghost_util.check_ghosts)
@@ -38,8 +38,8 @@ end
 
 function ghost_util.register_callback(callback_func)
 	log("ghost_util.register_callback")
-	if callback_func == nil then error("callback function must not be null") end 
-	if type(callback_func) ~= "function" then error("Handler should be callable.") end 
+	if callback_func == nil then error("callback function must not be null") end
+	if type(callback_func) ~= "function" then error("Handler should be callable.") end
 	ghost_util.callback_func = callback_func
 end
 -------------------------------------------------------------------------------

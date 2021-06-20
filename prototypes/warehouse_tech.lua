@@ -52,7 +52,7 @@ for k,v in pairs(myGlobal.RegisteredWarehouses) do
 		table.insert(whTech.effects,{type = "unlock-recipe",recipe = v.name})
 	elseif v.whType == "storage" or v.whType == "passive-provider" then
 		table.insert(whTechLogistic1.effects,{type = "unlock-recipe",recipe = v.name})
-	else 
+	else
 		table.insert(whTechLogistic2.effects,{type = "unlock-recipe",recipe = v.name})
 	end
 end

@@ -9,7 +9,7 @@ function lib_warehouse.getWHData(unitSize,whType,sizeScaling,suffix)
 	local whTypeName = whType
 	local whGroupName = string.format("%s-%s" , whNameBase , whSizeName)
 	local whName = string.format("%s-%s-%s", whNameBase, whTypeName, whSizeName)
-	if suffix then 
+	if suffix then
 		whName = whName .. "-" .. suffix
 	end
 	local whInvSize = math.min(unitSize * sizeScaling,540) -- Factorio team member "Earendal" mentions that containers >540 units have a huge ups issue. I dont know why this is, but I take his word for it.
@@ -40,7 +40,7 @@ function lib_warehouse.getParentSize(unitSize,itemType)
 	for k,v in pairs(sizeList) do
 		if v < unitSize then
 			parentSize = v
-		else 
+		else
 			return parentSize
 		end
 	end
@@ -52,7 +52,7 @@ function lib_warehouse.getWHParent(unitSize,logisticType,subType)
 		return lib_warehouse.getWHData(unitSize,"normal",0,subType)
 	else
 		local parentSize = lib_warehouse.getParentSize(unitSize,logisticType)
-		if parentSize>0 then 
+		if parentSize>0 then
 			return lib_warehouse.getWHData(parentSize,"normal",0,subType)
 		end
 	end
@@ -109,8 +109,8 @@ function lib_warehouse.getWHIngredients2(resourceScore,resourceTable,maxcount)
 	--Immer ein WH der nächst kleineren Größe
 	--Schleife (max 6 resourcen)
 	--	50% restwert berechnen - Teuerste Resource für den Preis verwenden ( gerundet auf 50 )
-	--normal 
-	-- stone brick, iron chest, steel chest, stone wall, small-lamp, concrete, plastic-bar, low-density-structure, 
+	--normal
+	-- stone brick, iron chest, steel chest, stone wall, small-lamp, concrete, plastic-bar, low-density-structure,
 	-- logistics
 	-- electronic-circuit, advanced-circuit, Processing unit, express-transport-belt, logistic-robot, roboport
 	ingredients = {}
@@ -271,7 +271,7 @@ function lib_warehouse.checkEntityName(name)
 	if name == "warehouse-signal-pole"then
 		return "pole"
 	end
-	if string.find(name, "^cust%-warehouse%-.+%-%d%d%d%$") then 
+	if string.find(name, "^cust%-warehouse%-.+%-%d%d%d%$") then
 		return "-"
 	end
 	return false
