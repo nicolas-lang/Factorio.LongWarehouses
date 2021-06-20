@@ -18,7 +18,6 @@ function lib_warehouse.getWHData(unitSize,whType,sizeScaling,suffix)
 end
 -------------------------------------------------------------------------------------
 function lib_warehouse.getWHIcon(unitSize,whType)
-	
 	local whIconImage = "__nco-LongWarehouses__/graphics/icons/warehouse-" .. whType .. ".png"
 	local whIconImageSize = "__nco-LongWarehouses__/graphics/icons/Numbers/icon_" .. tostring(unitSize) .. ".png"
 	local Icons = {
@@ -34,7 +33,7 @@ function lib_warehouse.getWHIcon(unitSize,whType)
 	return Icons
 end
 -------------------------------------------------------------------------------------
-function lib_warehouse.getParentSize(unitSize,itemType)
+function lib_warehouse.getParentSize(unitSize,_)
 	local parentSize = -1
 	local sizeList = myGlobal.whSizes
 	for k,v in pairs(sizeList) do
@@ -61,7 +60,7 @@ end
 function lib_warehouse.getWHIngredients(unitSize,logisticType,subType)
 	local initialScore = math.pow(2,unitSize)*55
 	local resourceScore = initialScore
-	baseIngredients ={
+	local baseIngredients ={
 		{name="low-density-structure",	count=20,		limit=600,	val=1000000},
 		{name="plastic-bar",			count=20,		limit=400,	val=100000},
 		{name="concrete",				count=20,		limit=400,	val=10000},
@@ -70,14 +69,13 @@ function lib_warehouse.getWHIngredients(unitSize,logisticType,subType)
 		{name="steel-chest",			count=5,		limit=50,	val=10},
 		{name="stone-brick",			count=10,		limit=400,	val=1},
 	}
-	techIngredients ={
+	local techIngredients ={
 		{name="nuclear-reactor",		count=1,		limit=10,	val=10000000},
 		{name="roboport",				count=1,		limit=10,	val=1000000},
 		{name="logistic-robot",			count=5,		limit=100,	val=10000},
 		{name="processing-unit",		count=10,		limit=400,	val=100},
 		{name="advanced-circuit",		count=10,		limit=400,	val=1},
 	}
-	
 	local ingredients ={}
 	local WHparent = lib_warehouse.getWHParent(unitSize,logisticType,subType)
 	if WHparent then
@@ -92,13 +90,11 @@ function lib_warehouse.getWHIngredients(unitSize,logisticType,subType)
 		data = lib_warehouse.getWHIngredients2(resourceScore,techIngredients,2)
 	end
 	local additionalIngredients = data.ingredients
-	resourceScore = data.resourceScore
 	--log("dyn additionalIngredients done")
 	for k,v in pairs(additionalIngredients) do
 		table.insert(ingredients, v)
 	end
-
-	--log("dyn recipe (score:" .. tostring(resourceScore) .. "/".. tostring(initialScore) .."):" )
+	--log("dyn recipe (score:" .. tostring(data.resourceScore) .. "/".. tostring(initialScore) .."):" )
 	--log(serpent.block( ingredients, {comment = false, numformat = '%1.8g', compact = true } ))
 	return ingredients
 end
@@ -113,7 +109,7 @@ function lib_warehouse.getWHIngredients2(resourceScore,resourceTable,maxcount)
 	-- stone brick, iron chest, steel chest, stone wall, small-lamp, concrete, plastic-bar, low-density-structure,
 	-- logistics
 	-- electronic-circuit, advanced-circuit, Processing unit, express-transport-belt, logistic-robot, roboport
-	ingredients = {}
+	local ingredients = {}
 	local i=0
 	for k,res in pairs(resourceTable) do
 		--log("checking resource")
@@ -133,9 +129,10 @@ function lib_warehouse.getWHIngredients2(resourceScore,resourceTable,maxcount)
 end
 --=================================================================================--
 function lib_warehouse.buildSpriteLayer(baseName,entityType,unitSize,direction)
+	local imageFile, imageFileHr, shft
 	local entityData = lib_warehouse.getWHData(unitSize,entityType,0,direction)
 	local layers = {}
-	bgTint = {r = 0.6, g = 0.6, b = 0.8, a = 0.9}
+	local bgTint = {r = 0.6, g = 0.6, b = 0.8, a = 0.9}
 	if entityType == "requester" then
 		bgTint = {r = 0.15, g = 0.6, b = 0.9, a = 0.9}
 	elseif entityType == "passive-provider" then
@@ -152,8 +149,8 @@ function lib_warehouse.buildSpriteLayer(baseName,entityType,unitSize,direction)
 	-------------------------------------------------------------------------------------
 	--left background
 	-------------------------------------------------------------------------------------
-	local imageFile = "__nco-LongWarehouses__/graphics/entity/" .. baseName .. "-" .. direction .. "-bg-left.png"
-	local shft = {
+	imageFile = "__nco-LongWarehouses__/graphics/entity/" .. baseName .. "-" .. direction .. "-bg-left.png"
+	shft = {
 		-(32*entityData.gridSize/2) + (32*3/2),
 		5
 	}
@@ -171,10 +168,10 @@ function lib_warehouse.buildSpriteLayer(baseName,entityType,unitSize,direction)
 	-------------------------------------------------------------------------------------
 	--middle background
 	-------------------------------------------------------------------------------------
-	local imageFile = "__nco-LongWarehouses__/graphics/entity/" .. baseName .. "-" .. direction .. "-bg-mid.png"
+	imageFile = "__nco-LongWarehouses__/graphics/entity/" .. baseName .. "-" .. direction .. "-bg-mid.png"
 	if unitSize > 1 then
 		for i=1,math.max(0,unitSize-1) do
-			local shft = {
+			shft = {
 				-(32*entityData.gridSize/2) + (32*6.5) + ((i-1)*32*7),
 				5
 			}
@@ -194,8 +191,8 @@ function lib_warehouse.buildSpriteLayer(baseName,entityType,unitSize,direction)
 	-------------------------------------------------------------------------------------
 	--right background
 	-------------------------------------------------------------------------------------
-	local imageFile = "__nco-LongWarehouses__/graphics/entity/" .. baseName .. "-" .. direction .. "-bg-right.png"
-	local shft = {
+	imageFile = "__nco-LongWarehouses__/graphics/entity/" .. baseName .. "-" .. direction .. "-bg-right.png"
+	shft = {
 		(32*entityData.gridSize/2) - (32*3/2),
 		5
 	}
@@ -213,10 +210,10 @@ function lib_warehouse.buildSpriteLayer(baseName,entityType,unitSize,direction)
 	-------------------------------------------------------------------------------------
 	--buildings
 	-------------------------------------------------------------------------------------
-	local imageFile = "__nco-LongWarehouses__/graphics/entity/" .. baseName .. "-" .. direction .. "-building.png"
-	local imageFileHr = "__nco-LongWarehouses__/graphics/entity/hr/" .. baseName .. "-" .. direction .. "-building.png"
+	imageFile = "__nco-LongWarehouses__/graphics/entity/" .. baseName .. "-" .. direction .. "-building.png"
+	imageFileHr = "__nco-LongWarehouses__/graphics/entity/hr/" .. baseName .. "-" .. direction .. "-building.png"
 	for i=1,unitSize do
-		local shft = {
+		shft = {
 			-(32*entityData.gridSize/2) + (32*6/2 + 5) + ((i-1)*32*7)-5,
 			0
 		}
@@ -284,7 +281,6 @@ function lib_warehouse.checkEntity(entity)
 	else
 		return 'entity', lib_warehouse.checkEntityName(entity.name)
 	end
-	return nil, nil
 end
 --=================================================================================--
 return lib_warehouse

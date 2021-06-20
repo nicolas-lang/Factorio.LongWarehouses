@@ -72,7 +72,6 @@ local function makeWarehouseProxy(unitSize,logisticType)
 	data:extend({whProxEnt})
 	--log("registering recipe")
 	data:extend({whProxRec})
-	
 end
 -------------------------------------------------------------------------------------
 local function makeWarehouse(unitSize,logisticType,subType)
@@ -96,7 +95,6 @@ local function makeWarehouse(unitSize,logisticType,subType)
 		hide_from_stats = "true",
 		name = whData.whName,
 		energy_required = 20,
-		enabled = "false",
 		ingredients = {{"coal",1}},
 		result = whData.whName,
 		icons = lib_warehouse.getWHIcon(unitSize,logisticType),
@@ -104,7 +102,7 @@ local function makeWarehouse(unitSize,logisticType,subType)
 		order = "a"
 	}
 	--===================================================================================
-	--Define Item 
+	--Define Item
 	--===================================================================================
 	local whItm = {
 			type = "item",
@@ -163,7 +161,7 @@ local function makeWarehouse(unitSize,logisticType,subType)
 	-------------------------------------------------------------------------------------
 	-- Entity: H/V
 	-------------------------------------------------------------------------------------
-	if subType == "v" then 
+	if subType == "v" then
 		whEnt.collision_box = {{-(whSizeB/2-0.01), -(whSizeA/2-0.01)}, {(whSizeB/2-0.01),(whSizeA/2-0.01)}}
 		whEnt.selection_box = {{-(whSizeB/2), -(whSizeA/2)}, {(whSizeB/2),(whSizeA/2)}}
 	end
@@ -180,26 +178,25 @@ local function makeWarehouse(unitSize,logisticType,subType)
 	data:extend({whEnt})
 	--log("registering recipe")
 	data:extend({whRec})
-end -- function makeWarehouse
-
+end -- function makeWarehouse
 --===================================================================================
 --Call WH Generator
 --===================================================================================
 myGlobal["whSizes"] = {2,4}
 local directions = {"h","v"}
 -------------------------------------------------------------------------------------
-for k1,v1 in pairs(myGlobal["whSizes"]) do
+for _, v1 in pairs(myGlobal["whSizes"]) do
 	makeWarehouseProxy(v1,"normal");
-	for k2,v2 in pairs(directions) do
+	for _, v2 in pairs(directions) do
 		makeWarehouse(v1,"normal",v2);
 	end
 end
 -------------------------------------------------------------------------------------
 local logistictypes = {"requester","storage","passive-provider","active-provider","buffer"}
-for k1,v1 in pairs(myGlobal["whSizes"]) do
-	for k2,v2 in pairs(logistictypes) do
+for _, v1 in pairs(myGlobal["whSizes"]) do
+	for _, v2 in pairs(logistictypes) do
 		makeWarehouseProxy(v1,v2);
-		for k3,v3 in pairs(directions) do
+		for _, v3 in pairs(directions) do
 			makeWarehouse(v1,v2,v3);
 		end
 	end

@@ -8,12 +8,12 @@ ghost_util.ghostcount = 0
 -------------------------------------------------------------------------------
 function ghost_util.init(_,check_interval,check_limit)
 	if check_interval == nil then
-		check_interval = 20
+		check_interval = 120
 	end
 	if check_limit ~= nil then
 		ghost_util.check_limit = check_limit
 	end
-	script.on_nth_tick(120,ghost_util.check_ghosts)
+	script.on_nth_tick(check_interval,ghost_util.check_ghosts)
 end
 function ghost_util.unregister_ghost(entity)
 	log("ghost_util.unregister_ghost")
@@ -29,7 +29,7 @@ end
 
 function ghost_util.register_ghost(entity)
 	log("ghost_util.register_ghost")
-	key = string.format("%s:%s:%s:%d:%d",entity.surface.name,entity.force.name, entity.ghost_name, entity.position.x, entity.position.y)
+	local key = string.format("%s:%s:%s:%d:%d",entity.surface.name,entity.force.name, entity.ghost_name, entity.position.x, entity.position.y)
 	ghost_util.ghosts[key] = {entity = entity, position = entity.position, ghost_name = entity.ghost_name, surface = entity.surface, force = entity.force, key = key}
 	ghost_util.ghostcount = ghost_util.ghostcount + 1
 end
