@@ -101,7 +101,10 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 		return
 	end
 	--rebuild stuff
-	local last_user = whEntity.last_user
+	local last_user
+	if whEntity then
+		last_user = whEntity.last_user
+	end
 	-- every warehouse needs a pole
 	if whEntityType == 'entity' and not poleEntity then
 		debugMsg("created new warehouse connector")
@@ -265,7 +268,7 @@ function myControl.on_entity_died(event)
 		return
 	end
 	local whType
-	_ , whType = lib_warehouse.checkEntity(entity)
+	_, whType = lib_warehouse.checkEntity(entity)
 	if whType then
 		local newEntityName = string.gsub(entity.name , "%-[hv]$", "-proxy")
 		local direction

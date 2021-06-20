@@ -178,7 +178,8 @@ local function makeWarehouse(unitSize,logisticType,subType)
 	data:extend({whEnt})
 	--log("registering recipe")
 	data:extend({whRec})
-end -- function makeWarehouse
+end -- function makeWarehouse
+
 --===================================================================================
 --Call WH Generator
 --===================================================================================
