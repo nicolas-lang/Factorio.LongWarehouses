@@ -6,8 +6,7 @@ ghost_util.ghostcount = 0
 -------------------------------------------------------------------------------
 --	public
 -------------------------------------------------------------------------------
-function ghost_util.init(lib_event,check_interval,check_limit)
-	--ghost_util.lib_event = lib_event
+function ghost_util.init(_,check_interval,check_limit)
 	if check_interval == nil then
 		check_interval = 20
 	end
@@ -15,13 +14,12 @@ function ghost_util.init(lib_event,check_interval,check_limit)
 		ghost_util.check_limit = check_limit
 	end
 	script.on_nth_tick(120,ghost_util.check_ghosts)
-	--lib_event.add_nth_tick(check_interval, ghost_util.check_ghosts)
 end
 function ghost_util.unregister_ghost(entity)
 	log("ghost_util.unregister_ghost")
 	--ghost nauvis:player:cust-warehouse-normal-013-proxy:222:93 became invalid
 	--{surface = {name = entity.surface.name},force = {name = entity.force.name}, ghost_name = entity.name, position = entity.position}
-	key = string.format("%s:%s:%s:%d:%d",entity.surface.name,entity.force.name, entity.ghost_name, entity.position.x, entity.position.y)
+	local key = string.format("%s:%s:%s:%d:%d",entity.surface.name,entity.force.name, entity.ghost_name, entity.position.x, entity.position.y)
 	if ghost_util.ghosts[key] then
 		log("unregistered ghost" .. key)
 		ghost_util.ghosts[key] = nil
@@ -45,7 +43,7 @@ end
 -------------------------------------------------------------------------------
 --	pseudo private
 -------------------------------------------------------------------------------
-function ghost_util.callback_func(entity)
+function ghost_util.callback_func(_)
 	log("ghost_util.callback_func")
 end
 

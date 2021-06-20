@@ -100,6 +100,8 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 		poleEntity.destroy()
 		return
 	end
+	--rebuild stuff
+	local last_user = whEntity.last_user
 	-- every warehouse needs a pole
 	if whEntityType == 'entity' and not poleEntity then
 		debugMsg("created new warehouse connector")
@@ -245,6 +247,7 @@ function myControl.on_entity_removed(event)
 		return
 	end
 	debugMsg(entity.name or entity.ghost_name)
+	local baseType, entityName
 	baseType, entityName = lib_warehouse.checkEntity(entity)
 	debugMsg((baseType or "") .. "::" .. (entityName or ""))
 	if data_util.has_value({"horizontal","vertical", "proxy"}, entityName) then
@@ -261,8 +264,7 @@ function myControl.on_entity_died(event)
 		debugMsg("OnEntityDied - entity not defined")
 		return
 	end
-
-	local entity = event.entity
+	local whType
 	_ , whType = lib_warehouse.checkEntity(entity)
 	if whType then
 		local newEntityName = string.gsub(entity.name , "%-[hv]$", "-proxy")
@@ -325,7 +327,7 @@ end
 -------------------------------------------------------------------------------------
 -- Register Commands
 -------------------------------------------------------------------------------------
-commands.add_command("wh_check", nil, function(command)
+commands.add_command("wh_check", nil, function(_)
 	myControl.validate_warehouses()
 end)
 -------------------------------------------------------------------------------------

@@ -22,7 +22,7 @@ function data_util.getResearchUnitIngredients(technology_name)
 			if technology.unit.ingredients then
 				return technology.unit.ingredients
 			end
-		end	
+		end
 	end
 	return {}
 end
@@ -35,8 +35,7 @@ function data_util.getTechnologyFromName(technology_name)
 	end
 	return nil
 end
--------------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------------
 function data_util.getResearchUnitCount(technology_name)
 	local technology = data_util.getTechnologyFromName(technology_name)
 	if technology and next(technology) ~= nil then
@@ -44,7 +43,7 @@ function data_util.getResearchUnitCount(technology_name)
 			if technology.unit.count then
 				return technology.unit.count
 			end
-		end	
+		end
 	end
 	return 1
 end
