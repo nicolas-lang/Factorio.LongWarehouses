@@ -53,7 +53,7 @@ function data_util.reload_tech_unlock(technology_name)
 	for _, force in pairs(game.forces) do
 		if force.technologies[technology_name].researched then
 			for _, effect in pairs(force.technologies[technology_name].effects) do
-				log(serpent.block( effect, {comment = false, numformat = '%1.8g', compact = true } ))
+				--log(serpent.block( effect, {comment = false, numformat = '%1.8g', compact = true } ))
 				if effect.type == "unlock-recipe" then
 					force.recipes[effect.recipe].enabled = true
 					log(effect.recipe .. " enabled")

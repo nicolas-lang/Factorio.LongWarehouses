@@ -1,6 +1,6 @@
 ﻿local ghost_util = {}
 ghost_util.check_limit = 20
-ghost_util.ghosts = {}
+ghost_util.ghosts = {} -- if we get desyncs investigate here
 ghost_util.ghostcount = 0
 --=============================================================================
 -------------------------------------------------------------------------------

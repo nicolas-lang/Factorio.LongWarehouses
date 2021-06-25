@@ -65,6 +65,7 @@ end
 -------------------------------------------------------------------------------------
 function myControl.validate_warehouse(position,force,surface,deconstructing)
 	debugMsg("validating warehouse composite entity")
+	local _ -- lua style check needs throwaways to be declared
 	local searchResult
 	local whEntity
 	local whEntityType
