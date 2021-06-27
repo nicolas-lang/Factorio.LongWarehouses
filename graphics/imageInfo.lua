@@ -10,7 +10,7 @@ myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/warehouse-v-bg-mid.pn
 myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/warehouse-v-bg-right.png"]={width=268, height=391}
 myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/warehouse-v-bg.png"]={width=268, height=1677}
 myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/warehouse-v-building.png"]={width=64, height=213}
-myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/hr/addon-power-pole-shadow.png"]={width=128, height=64}
+myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/hr/addon-power-pole-shadow.png"]={width=188, height=48}
 myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/hr/addon-power-pole.png"]={width=74, height=151}
 myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/hr/warehouse-h-building.png"]={width=951, height=340}
 myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/hr/warehouse-v-building.png"]={width=256, height=852}
