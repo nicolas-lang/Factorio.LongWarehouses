@@ -13,29 +13,28 @@ function ghost_util.init(_,check_interval,check_limit)
 	if check_limit ~= nil then
 		ghost_util.check_limit = check_limit
 	end
+	--ToDo: https://forums.factorio.com/viewtopic.php?t=57306
 	script.on_nth_tick(check_interval,ghost_util.check_ghosts)
 end
 function ghost_util.unregister_ghost(entity)
-	log("ghost_util.unregister_ghost")
-	--ghost nauvis:player:cust-warehouse-normal-013-proxy:222:93 became invalid
-	--{surface = {name = entity.surface.name},force = {name = entity.force.name}, ghost_name = entity.name, position = entity.position}
+	--log("ghost_util.unregister_ghost")
 	local key = string.format("%s:%s:%s:%d:%d",entity.surface.name,entity.force.name, entity.ghost_name, entity.position.x, entity.position.y)
 	if ghost_util.ghosts[key] then
-		log("unregistered ghost" .. key)
+		--log("unregistered ghost" .. key)
 		ghost_util.ghosts[key] = nil
 		ghost_util.ghostcount = ghost_util.ghostcount - 1
 	end
 end
 
 function ghost_util.register_ghost(entity)
-	log("ghost_util.register_ghost")
+	--log("ghost_util.register_ghost")
 	local key = string.format("%s:%s:%s:%d:%d",entity.surface.name,entity.force.name, entity.ghost_name, entity.position.x, entity.position.y)
 	ghost_util.ghosts[key] = {entity = entity, position = entity.position, ghost_name = entity.ghost_name, surface = entity.surface, force = entity.force, key = key}
 	ghost_util.ghostcount = ghost_util.ghostcount + 1
 end
 
 function ghost_util.register_callback(callback_func)
-	log("ghost_util.register_callback")
+	--log("ghost_util.register_callback")
 	if callback_func == nil then error("callback function must not be null") end
 	if type(callback_func) ~= "function" then error("Handler should be callable.") end
 	ghost_util.callback_func = callback_func
@@ -44,17 +43,17 @@ end
 --	pseudo private
 -------------------------------------------------------------------------------
 function ghost_util.callback_func(_)
-	log("ghost_util.callback_func")
+	--log("ghost_util.callback_func")
 end
 
 function ghost_util.check_ghosts()
 	if ghost_util.ghostcount == 0 then
 		return
 	end
-	log("ghost_util.check_ghosts")
+	--log("ghost_util.check_ghosts")
 	for key, ghost in pairs(ghost_util.ghosts) do
 		if not ghost.entity.valid then
-			log("ghost " .. key .. " became invalid")
+			--log("ghost " .. key .. " became invalid")
 			ghost_util.ghosts[key].entity = nil
 			ghost_util.callback_func(ghost_util.ghosts[key])
 			ghost_util.ghosts[key] = nil

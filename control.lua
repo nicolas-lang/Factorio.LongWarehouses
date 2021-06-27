@@ -8,26 +8,38 @@ ghost_util.init(nil,nil,nil)
 -------------------------------------------------------------------------------------
 local function debugMsg(msg)
 	if game then
-		game.players[1].print(msg)
-		if game.players[2] then
-			game.players[2].print(msg)
-		end
+		game.print(msg, {r = 0.75, g = 0.5, b = 0.25, a = 0} )
 	end
 	log(msg)
 end
 -------------------------------------------------------------------------------------
 --Enable Recipes if tech researched ( usefull if an update added new WH types)
 -------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+function myControl.reload_tech_unlock(technology_name)
+	log("reload_tech_unlock")
+	for _, force in pairs(game.forces) do
+		if force.technologies[technology_name].researched then
+			for _, effect in pairs(force.technologies[technology_name].effects) do
+				if effect.type == "unlock-recipe" then
+					force.recipes[effect.recipe].enabled = true
+					log(effect.recipe .. " enabled")
+				end
+			end
+		end
+	end
+end
+
 function myControl.script_on_configuration_changed()
-	data_util.reload_tech_unlock("nco-LongWarehouses")
-	data_util.reload_tech_unlock("nco-LongWarehousesLogistics1")
-	data_util.reload_tech_unlock("nco-LongWarehousesLogistics2")
+	myControl.reload_tech_unlock("nco-LongWarehouses")
+	myControl.reload_tech_unlock("nco-LongWarehousesLogistics1")
+	myControl.reload_tech_unlock("nco-LongWarehousesLogistics2")
 end
 -------------------------------------------------------------------------------------
 -- All the things to control the things
 -------------------------------------------------------------------------------------
 function myControl.validate_warehouses()
-	debugMsg("myControl.validate_warehouses")
+	game.print("myControl.validate_warehouses", {r = 0.5, g = 0.5, b = 0.25, a = 0} )
 	myControl.validate_warehouse_member("warehouse-signal-pole")
 	for _, whBase in pairs(myGlobal["RegisteredWarehouses"]) do
 		myControl.validate_warehouse_member(whBase.."-proxy")
@@ -37,25 +49,25 @@ function myControl.validate_warehouses()
 end
 -------------------------------------------------------------------------------------
 function myControl.validate_warehouse_member(subEntityName)
-	debugMsg("validating " .. subEntityName)
+	-- debugMsg("validating " .. subEntityName)
 	for _, surface in pairs(game.surfaces) do
 		if not surface or not surface.valid then
-			debugMsg("invalid surface")
+			-- debugMsg("invalid surface")
 			break
 		end
 		for _, force in pairs(game.forces) do
 			if not force or not force.valid then
-				debugMsg("invalid force")
+				-- debugMsg("invalid force")
 				break
 			end
 			local searchResult
 			searchResult = surface.find_entities_filtered({force = force, name = subEntityName})
-			debugMsg("found " .. tostring(#searchResult) .. " entities")
+			-- debugMsg("found " .. tostring(#searchResult) .. " entities")
 			for _, ent in pairs(searchResult) do
 				myControl.validate_warehouse(ent.position,ent.force,ent.surface,false)
 			end
 			searchResult = surface.find_entities_filtered({force = force, ghost_name = subEntityName})
-			debugMsg("found " .. tostring(#searchResult) .. " entity-ghosts")
+			-- debugMsg("found " .. tostring(#searchResult) .. " entity-ghosts")
 			for _, ent in pairs(searchResult) do
 				myControl.validate_warehouse(ent.position,ent.force,ent.surface,false)
 			end
@@ -64,7 +76,7 @@ function myControl.validate_warehouse_member(subEntityName)
 end
 -------------------------------------------------------------------------------------
 function myControl.validate_warehouse(position,force,surface,deconstructing)
-	debugMsg("validating warehouse composite entity")
+	-- debugMsg("validating warehouse composite entity")
 	local _ -- lua style check needs throwaways to be declared
 	local searchResult
 	local whEntity
@@ -78,26 +90,27 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 		local _entityName
 		_baseType, _entityName = lib_warehouse.checkEntity(ent)
 		if data_util.has_value({"horizontal","vertical", "proxy"}, _entityName) then
-			debugMsg("found ".. _entityName .." " .. _baseType)
+			-- debugMsg("found ".. _entityName .." " .. _baseType)
 			whEntity = ent
 			whEntityType = _baseType
 			whType = _entityName
 		end
 		if _entityName == "pole" then
-			debugMsg("found existing warehouse connector " .. _baseType)
+			-- debugMsg("found existing warehouse connector " .. _baseType)
 			poleEntity = ent
 			poleEntityType = _baseType
 		end
 	end
 	-- "warehouse-signal-pole" always is part of a composite entity with a warehouse
 	if not whType and poleEntityType then
-		debugMsg("removed orphaned warehouse connector")
+		game.print("removed orphaned warehouse connector", {r = 0.75, g = 0.5, b = 0.25, a = 0} )
+		-- debugMsg("removed orphaned warehouse connector")
 		poleEntity.destroy()
 		return
 	end
 	-- we are deconstructing...
 	if deconstructing and poleEntityType then
-		debugMsg("removed warehouse connector")
+		-- debugMsg("removed warehouse connector")
 		poleEntity.destroy()
 		return
 	end
@@ -108,7 +121,7 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 	end
 	-- every warehouse needs a pole
 	if whEntityType == 'entity' and not poleEntity then
-		debugMsg("created new warehouse connector")
+		-- debugMsg("created new warehouse connector")
 		poleEntity = surface.create_entity{
 			name="warehouse-signal-pole",
 			position = whEntity.position,
@@ -119,7 +132,7 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 	end
 	-- it looks neater if warehouse ghosts also have a pole ghost
 	if whEntityType == 'entity-ghost' and not poleEntity then
-		debugMsg("created new warehouse connector ghost")
+		-- debugMsg("created new warehouse connector ghost")
 		poleEntity = surface.create_entity{
 			name="entity-ghost",
 			inner_name = "warehouse-signal-pole",
@@ -132,17 +145,18 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 
 	-- ghost state of warehouse and pole is synchronized, the pole is never manually built, but rather scripted
 	if whEntityType == 'entity' and poleEntityType == 'entity-ghost' then
-		debugMsg("revived warehouse connector ghost")
+		-- debugMsg("revived warehouse connector ghost")
 		_, poleEntity = poleEntity.revive()
 		poleEntityType = "entity"
 	end
 
 	-- a wh ghost is always a proxy and never a direction typed wh (this only happens with strg-z, which also breakes pole connections, but there is no fix)
 	if whEntityType == 'entity-ghost' and data_util.has_value({"horizontal","vertical"}, whType) then
-		debugMsg("warning, using undo will break wire connections of the warehouse connector")
+		game.print("warning, using undo will break wire connections of the warehouse connector", {r = 0.75, g = 0.5, b = 0.25, a = 0} )
+		-- debugMsg("warning, using undo will break wire connections of the warehouse connector")
 		local newEntityName = string.gsub(whEntity.ghost_name , "%-[hv]$", "-proxy")
 		local direction
-		debugMsg("replacing ghost for " .. whEntity.ghost_name  .. " with " .. newEntityName)
+		-- debugMsg("replacing ghost for " .. whEntity.ghost_name  .. " with " .. newEntityName)
 		if whType == "vertical" then
 			direction = defines.direction.west
 		else
@@ -164,10 +178,11 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 	end
 	-- the pole is always connected to it's wh
 	if poleEntityType == 'entity' and whEntityType == 'entity' then
-		debugMsg("connecting wires")
+		-- debugMsg("connecting wires")
 		poleEntity.connect_neighbour({wire = defines.wire_type.red,target_entity = whEntity})
 		poleEntity.connect_neighbour({wire = defines.wire_type.green,target_entity = whEntity})
 	end
+	
 end
 -------------------------------------------------------------------------------------
 -- On Built Item Replace to allow non square warehouses
@@ -175,10 +190,10 @@ end
 function myControl.on_built(event)
 	local built_entity = event.created_entity or event.entity
 	if not built_entity then
-		debugMsg("on_built - entity not defined")
+		-- debugMsg("on_built - entity not defined")
 		return
 	end
-	debugMsg("on_built " .. built_entity.name)
+	-- debugMsg("on_built " .. built_entity.name)
 	local baseType
 	local entityName
 	local position = built_entity.position
@@ -186,14 +201,14 @@ function myControl.on_built(event)
 	local surface = built_entity.surface
 	-- ensure we are building something relevant
 	baseType, entityName = lib_warehouse.checkEntity(built_entity)
-	debugMsg(baseType .. "::" .. (entityName or ""))
+	-- debugMsg(baseType .. "::" .. (entityName or ""))
 	-- manage ghost related pseudo events
 	if baseType == "entity-ghost" and entityName == "proxy" then
-		debugMsg("watching new proxy ghost")
+		-- debugMsg("watching new proxy ghost")
 		ghost_util.register_ghost(built_entity)
 	elseif baseType == "entity" and entityName == "proxy" then
 		--it is probably we have been built from a Ghost --> unregister this Ghost from watchlist
-		debugMsg("unregistering possible proxy ghost from watchlist")
+		-- debugMsg("unregistering possible proxy ghost from watchlist")
 		ghost_util.unregister_ghost({
 			surface = {name = built_entity.surface.name},
 			force = {name = built_entity.force.name},
@@ -214,7 +229,7 @@ end
 -- On WhProxy Build
 -------------------------------------------------------------------------------------
 function myControl.on_built_proxy(proxy)
-	debugMsg("on_built_proxy")
+	-- debugMsg("on_built_proxy")
 	local surface = proxy.surface
 	local position = proxy.position
 	local force = proxy.force
@@ -227,33 +242,33 @@ function myControl.on_built_proxy(proxy)
 		structure_name = proxy.name:gsub("-proxy", "-h")
 	end
 	-- replace structure
-	debugMsg("kill proxy ".. proxy.name)
+	-- debugMsg("kill proxy ".. proxy.name)
 	proxy.destroy()
 	--=========================================================================
-	debugMsg("created new " .. structure_name)
+	-- debugMsg("created new " .. structure_name)
 	surface.create_entity{
 		name = structure_name,
 		position = position,
 		force = force,
 		player = last_user
 	}
-	-- remainer of composite entity if built in validation called by on_built
+	-- remainder of composite entity is built in validation called by on_built
 end
 
 -------------------------------------------------------------------------------------
 -- On Entity Removed
 -------------------------------------------------------------------------------------
 function myControl.on_entity_removed(event)
-	debugMsg("OnEntityRemoved")
+	-- debugMsg("OnEntityRemoved")
 	local entity = event.entity
 	if not entity or not entity.valid then
-		debugMsg("OnEntityRemoved - entity not defined")
+		-- debugMsg("OnEntityRemoved - entity not defined")
 		return
 	end
-	debugMsg(entity.name or entity.ghost_name)
+	-- debugMsg(entity.name or entity.ghost_name)
 	local baseType, entityName
 	baseType, entityName = lib_warehouse.checkEntity(entity)
-	debugMsg((baseType or "") .. "::" .. (entityName or ""))
+	-- debugMsg((baseType or "") .. "::" .. (entityName or ""))
 	if data_util.has_value({"horizontal","vertical", "proxy"}, entityName) then
 		myControl.validate_warehouse(entity.position,entity.force,entity.surface,true)
 	end
@@ -262,18 +277,17 @@ end
 -- On Entity Died
 -------------------------------------------------------------------------------------
 function myControl.on_entity_died(event)
-	debugMsg("OnEntityDied")
+	-- debugMsg("OnEntityDied")
 	local entity = event.entity
 	if not entity or not entity.valid then
-		debugMsg("OnEntityDied - entity not defined")
+		-- debugMsg("OnEntityDied - entity not defined")
 		return
 	end
-	local whType
-	_, whType = lib_warehouse.checkEntity(entity)
+	local _, whType = lib_warehouse.checkEntity(entity)
 	if whType then
 		local newEntityName = string.gsub(entity.name , "%-[hv]$", "-proxy")
 		local direction
-		debugMsg("creating ghost for died " .. entity.name  .. " as " .. newEntityName)
+		-- debugMsg("creating ghost for died " .. entity.name  .. " as " .. newEntityName)
 		if whType == "vertical" then
 			direction = defines.direction.west
 		else
@@ -294,7 +308,7 @@ end
 -- On Entity Ghost Removed
 -------------------------------------------------------------------------------------
 function myControl.on_ghost_removed(data)
-	debugMsg("entity-ghost became invalid at ".. data.key)
+	-- debugMsg("entity-ghost became invalid at ".. data.key)
 	myControl.validate_warehouse(data.position,data.force,data.surface,false)
 end
 ghost_util.register_callback(myControl.on_ghost_removed)
@@ -302,7 +316,7 @@ ghost_util.register_callback(myControl.on_ghost_removed)
 -- On Blueprint Item Replace to Reset Item to Item-Proxy
 -------------------------------------------------------------------------------------
 function myControl.on_blueprint(event)
-	debugMsg("on_blueprint")
+	-- debugMsg("on_blueprint")
 	local player = game.players[event.player_index]
 	local bp = player.blueprint_to_setup
 	if not bp or not bp.valid_for_read then
@@ -333,6 +347,7 @@ end
 -------------------------------------------------------------------------------------
 commands.add_command("wh_check", nil, function(_)
 	myControl.validate_warehouses()
+	game.print("called /wh_check", {r = 0.75, g = 0.5, b = 0.25, a = 0} )
 end)
 -------------------------------------------------------------------------------------
 -- Register Hooks

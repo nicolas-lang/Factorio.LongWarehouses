@@ -1,4 +1,4 @@
-log("warehouses-entity")
+--log("warehouses-entity")
 local myGlobal = require("__nco-LongWarehouses__/lib/nco_data")
 local lib_warehouse = require("__nco-LongWarehouses__/lib/lib_warehouse")
 -------------------------------------------------------------------------------------
@@ -23,7 +23,7 @@ local function makeWarehouseProxy(unitSize,logisticType)
 		result = whData.whName,
 		icons = lib_warehouse.getWHIcon(unitSize,logisticType),
 		subgroup = "cust-warehouse",
-		order = "a"
+		order = whData.sortOrder
 	}
 	-------------------------------------------------------------------------------------
 	local whProxItm = {
@@ -31,7 +31,7 @@ local function makeWarehouseProxy(unitSize,logisticType)
 			name = whData.whName,
 			icons = lib_warehouse.getWHIcon(unitSize,logisticType),
 			subgroup = "cust-warehouse",
-			order = "a[" .. whData.whName .. "]",
+			order = whData.sortOrder,
 			place_result = whData.whName,
 			stack_size = 5,
 		}
@@ -82,8 +82,7 @@ local function makeWarehouse(unitSize,logisticType,subType)
 	local whProxy = lib_warehouse.getWHData(unitSize,logisticType,80,"proxy")
 	local whSizeA = whData.gridSize
 	local whSizeB = 1.999
-	log("registering warehouse " .. whData.whName)
-	--table.insert(myGlobal["RegisteredWarehouses"],{name=whData.whName,whType=whData.whTypeName})
+	--log("registering warehouse " .. whData.whName)
 	--===================================================================================
 	--Define Recipe
 	--===================================================================================
@@ -99,7 +98,7 @@ local function makeWarehouse(unitSize,logisticType,subType)
 		result = whData.whName,
 		icons = lib_warehouse.getWHIcon(unitSize,logisticType),
 		subgroup = "cust-warehouse",
-		order = "a"
+		order = whData.sortOrder
 	}
 	--===================================================================================
 	--Define Item
@@ -112,7 +111,7 @@ local function makeWarehouse(unitSize,logisticType,subType)
 			name = whData.whName,
 			icons = lib_warehouse.getWHIcon(unitSize,logisticType),
 			subgroup = "cust-warehouse",
-			order = "a[" .. whData.whName .. "]",
+			order = whData.sortOrder,
 			place_result = whData.whName,
 			stack_size = 5,
 		}

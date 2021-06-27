@@ -9,12 +9,18 @@ function lib_warehouse.getWHData(unitSize,whType,sizeScaling,suffix)
 	local whTypeName = whType
 	local whGroupName = string.format("%s-%s" , whNameBase , whSizeName)
 	local whName = string.format("%s-%s-%s", whNameBase, whTypeName, whSizeName)
+	local sortOrder
+	if whType == "normal" then 
+		sortOrder = string.format("a[%d-%s-%s]", 0, whTypeName, whSizeName)
+	else
+		sortOrder = string.format("a[%d-%s-%s]", 1, whTypeName, whSizeName)
+	end
 	if suffix then
 		whName = whName .. "-" .. suffix
 	end
 	local whInvSize = math.min(unitSize * sizeScaling,540) -- Factorio team member "Earendal" mentions that containers >540 units have a huge ups issue. I dont know why this is, but I take his word for it.
 	local whHealth = 500 + unitSize * 250
-	return {whNameBase = whNameBase, whSizeName=whSizeName, whTypeName=whTypeName, whGroupName=whGroupName, whName=whName, gridSize=gridSize, whInvSize=whInvSize, whHealth=whHealth}
+	return {whNameBase = whNameBase, whSizeName=whSizeName, whTypeName=whTypeName, whGroupName=whGroupName, whName=whName, gridSize=gridSize, whInvSize=whInvSize, whHealth=whHealth,sortOrder=sortOrder}
 end
 -------------------------------------------------------------------------------------
 function lib_warehouse.getWHIcon(unitSize,whType)
@@ -239,7 +245,7 @@ function lib_warehouse.buildSpriteLayer(baseName,entityType,unitSize,direction)
 				filename = "__nco-LongWarehouses__/graphics/entity/hr/addon-power-pole.png",
 				width = myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/hr/addon-power-pole.png"].width,
 				height = myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/hr/addon-power-pole.png"].height,
-				shift = { 0, -0.85 },
+				shift = util.by_pixel(0,-23),
 				scale = 0.5,
 		})
 	table.insert(layers,{
@@ -247,7 +253,7 @@ function lib_warehouse.buildSpriteLayer(baseName,entityType,unitSize,direction)
 				filename = "__nco-LongWarehouses__/graphics/entity/hr/addon-power-pole-shadow.png",
 				width = myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/hr/addon-power-pole-shadow.png"].width,
 				height = myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/hr/addon-power-pole-shadow.png"].height,
-				shift = { 0.75, 0 },
+				shift = util.by_pixel(28,0),
 				scale = 0.5,
 		})
 	--log(serpent.block( layers, {comment = false, numformat = '%1.8g', compact = true } ))
