@@ -178,15 +178,15 @@ end -- function makeWarehouse
 --===================================================================================
 myGlobal["whSizes"] = {}
 for _, size in pairs(data_util.csv_split(settings.startup["wh-sizes"].value, ';')) do
-	local size = tonumber(data_util.trim(size))
+	local sizeValue = tonumber(data_util.trim(size))
 	if (
-			size
-		and	size < 32
-		and	not data_util.has_value (myGlobal["whSizes"], size)
+			sizeValue
+		and	sizeValue < 32
+		and	not data_util.has_value (myGlobal["whSizes"], sizeValue)
 	)then
-		table.insert(myGlobal["whSizes"],size)
+		table.insert(myGlobal["whSizes"],sizeValue)
 	else
-		log("invalid size: " .. size)
+		log("invalid size: " .. sizeValue)
 	end
 end
 -------------------------------------------------------------------------------------

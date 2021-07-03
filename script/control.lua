@@ -7,13 +7,6 @@ local _ -- lua style check needs throwaways to be declared
 -------------------------------------------------------------------------------------
 ghost_util.init(nil,nil,nil)
 -------------------------------------------------------------------------------------
-local function debugMsg(msg)
-	if game then
-		game.print(msg, {r = 0.75, g = 0.5, b = 0.25, a = 0} )
-	end
-	log(msg)
-end
--------------------------------------------------------------------------------------
 -- All the things to control the things
 -------------------------------------------------------------------------------------
 function myControl.validate_warehouses()
@@ -59,7 +52,8 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 		entity = nil,
 		entityType = nil
 	}
-	local searchResult = surface.find_entities_filtered({force = force, position = position, radius = 0.001})
+	local searchResult
+	searchResult = surface.find_entities_filtered({force = force, position = position, radius = 0.001})
 	for _, entity in pairs(searchResult) do
 		local baseType, entityName = lib_warehouse.checkEntity(entity)
 		if data_util.has_value({"horizontal","vertical", "proxy"}, entityName) then
@@ -79,7 +73,6 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 		pole.entity.destroy()
 		return
 	end
-	
 	if deconstructing and pole.entity then
 		-- we are deconstructing
 		-- the warehouse is handled by game logic
@@ -87,9 +80,7 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 		pole.entity.destroy()
 		return
 	end
-	
 	--Ensure all parts of the composite entity exist
-	local last_user
 	if wh.entity then
 		wh.last_user = wh.entity.last_user
 	end
@@ -118,7 +109,7 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 	if wh.entityType == 'entity' and pole.entityType == 'entity-ghost' then
 		-- ghost state of warehouse and pole is synchronized, the pole is never manually built, but rather scripted
 		pole.entity.revive()
-		local searchResult = surface.find_entities_filtered({force = force, position = position, name = "warehouse-signal-pole", radius = 0.001})
+		searchResult = surface.find_entities_filtered({force = force, position = position, name = "warehouse-signal-pole", radius = 0.001})
 		for _, entity in pairs(searchResult) do
 			pole.entity = entity
 			pole.entityType = "entity"
@@ -171,7 +162,6 @@ function myControl.on_built(event)
 	local surface = built_entity.surface
 	local baseType, entityName = lib_warehouse.checkEntity(built_entity)
 	log(baseType .. "::" .. (entityName or ""))
-	
 	if baseType == "entity-ghost" and entityName == "proxy" then
 		-- manage ghost related pseudo events
 		ghost_util.register_ghost(built_entity)
@@ -229,7 +219,7 @@ function myControl.on_entity_removed(event)
 	if not entity or not entity.valid then
 		return
 	end
-	local baseType, entityName = lib_warehouse.checkEntity(entity)
+	local _, entityName = lib_warehouse.checkEntity(entity)
 	if data_util.has_value({"horizontal","vertical", "proxy"}, entityName) then
 		myControl.validate_warehouse(entity.position,entity.force,entity.surface,true)
 	end

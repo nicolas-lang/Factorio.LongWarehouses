@@ -10,7 +10,7 @@ function lib_warehouse.getWHData(unitSize,whType,sizeScaling,suffix)
 	local whGroupName = string.format("%s-%s" , whNameBase , whSizeName)
 	local whName = string.format("%s-%s-%s", whNameBase, whTypeName, whSizeName)
 	local sortOrder
-	if whType == "normal" then 
+	if whType == "normal" then
 		sortOrder = string.format("a[%d-%s-%s]", 0, whTypeName, whSizeName)
 	else
 		sortOrder = string.format("a[%d-%s-%s]", 1, whTypeName, whSizeName)
@@ -18,7 +18,7 @@ function lib_warehouse.getWHData(unitSize,whType,sizeScaling,suffix)
 	if suffix then
 		whName = whName .. "-" .. suffix
 	end
-	 -- Factorio team member "Earendal" mentions that containers >540 units have a huge ups issue. 
+	 -- Factorio team member "Earendal" mentions that containers >540 units have a huge ups issue.
 	 -- I dont know why this is, but I take his word for it.
 	local whInvSize = math.min(unitSize * sizeScaling,540)
 	local whHealth = 500 + unitSize * 250

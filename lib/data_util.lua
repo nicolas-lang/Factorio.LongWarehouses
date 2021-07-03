@@ -5,8 +5,8 @@ function data_util.trim(s)
 end
 -------------------------------------------------------------------------------------
 function data_util.csv_split (str, separator)
-	pattern = '([^'.. separator ..']+)'
-	result = {}
+	local pattern = '([^'.. separator ..']+)'
+	local result = {}
 	if str then
 		for word in string.gmatch(str, pattern) do
 			table.insert(result,word)
