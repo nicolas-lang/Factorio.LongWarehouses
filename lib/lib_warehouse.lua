@@ -18,7 +18,9 @@ function lib_warehouse.getWHData(unitSize,whType,sizeScaling,suffix)
 	if suffix then
 		whName = whName .. "-" .. suffix
 	end
-	local whInvSize = math.min(unitSize * sizeScaling,540) -- Factorio team member "Earendal" mentions that containers >540 units have a huge ups issue. I dont know why this is, but I take his word for it.
+	 -- Factorio team member "Earendal" mentions that containers >540 units have a huge ups issue. 
+	 -- I dont know why this is, but I take his word for it.
+	local whInvSize = math.min(unitSize * sizeScaling,540)
 	local whHealth = 500 + unitSize * 250
 	return {whNameBase = whNameBase, whSizeName=whSizeName, whTypeName=whTypeName, whGroupName=whGroupName, whName=whName, gridSize=gridSize, whInvSize=whInvSize, whHealth=whHealth,sortOrder=sortOrder}
 end
@@ -66,22 +68,6 @@ end
 function lib_warehouse.getWHIngredients(unitSize,logisticType,subType)
 	local initialScore = math.pow(2,unitSize)*55
 	local resourceScore = initialScore
-	local baseIngredients ={
-		{name="low-density-structure",	count=20,		limit=600,	val=1000000},
-		{name="plastic-bar",			count=20,		limit=400,	val=100000},
-		{name="concrete",				count=20,		limit=400,	val=10000},
-		{name="small-lamp",				count=5,		limit=40,	val=1000},
-		{name="stone-wall",				count=20,		limit=400,	val=100},
-		{name="steel-chest",			count=5,		limit=50,	val=10},
-		{name="stone-brick",			count=10,		limit=400,	val=1},
-	}
-	local techIngredients ={
-		{name="nuclear-reactor",		count=1,		limit=10,	val=10000000},
-		{name="roboport",				count=1,		limit=10,	val=1000000},
-		{name="logistic-robot",			count=5,		limit=100,	val=10000},
-		{name="processing-unit",		count=10,		limit=400,	val=100},
-		{name="advanced-circuit",		count=10,		limit=400,	val=1},
-	}
 	local ingredients ={}
 	local WHparent = lib_warehouse.getWHParent(unitSize,logisticType,subType)
 	if WHparent then
@@ -91,12 +77,11 @@ function lib_warehouse.getWHIngredients(unitSize,logisticType,subType)
 	local resourceCount = math.min(5,unitSize)
 	local data
 	if logisticType == "normal" then
-		data = lib_warehouse.getWHIngredients2(resourceScore,baseIngredients,resourceCount)
+		data = lib_warehouse.getWHIngredientsByScore(resourceScore,myGlobal.baseIngredients,resourceCount)
 	else
-		data = lib_warehouse.getWHIngredients2(resourceScore,techIngredients,2)
+		data = lib_warehouse.getWHIngredientsByScore(resourceScore,myGlobal.techIngredients,2)
 	end
 	local additionalIngredients = data.ingredients
-	--log("dyn additionalIngredients done")
 	for k,v in pairs(additionalIngredients) do
 		table.insert(ingredients, v)
 	end
@@ -105,21 +90,15 @@ function lib_warehouse.getWHIngredients(unitSize,logisticType,subType)
 	return ingredients
 end
 -------------------------------------------------------------------------------------
-function lib_warehouse.getWHIngredients2(resourceScore,resourceTable,maxcount)
-	--Konzept Preis
-	--WH Wert unitSize*skalar
+function lib_warehouse.getWHIngredientsByScore(resourceScore,resourceTable,maxcount)
+	--WH Wert unitSize^2*skalar
 	--Immer ein WH der nächst kleineren Größe
 	--Schleife (max 6 resourcen)
-	--	50% restwert berechnen - Teuerste Resource für den Preis verwenden ( gerundet auf 50 )
-	--normal
-	-- stone brick, iron chest, steel chest, stone wall, small-lamp, concrete, plastic-bar, low-density-structure,
-	-- logistics
-	-- electronic-circuit, advanced-circuit, Processing unit, express-transport-belt, logistic-robot, roboport
+	--	50% restwert berechnen - Teuerste Resource für den Preis verwenden ( gerundet auf pseudo-stack )
 	local ingredients = {}
 	local i=0
 	for k,res in pairs(resourceTable) do
-		--log("checking resource")
-		--log(serpent.block( res, {comment = false, numformat = '%1.8g' } ))
+		--log("checking resource: "..serpent.block( res, {comment = false, numformat = '%1.8g' } ))
 		if resourceScore>res.val then
 			local cnt  = resourceScore/res.val
 			cnt = math.floor(cnt/res.count)*res.count
@@ -149,8 +128,6 @@ function lib_warehouse.buildSpriteLayer(baseName,entityType,unitSize,direction)
 		bgTint = {r = 0.6, g = 0.2, b = 0.7, a = 0.9}
 	elseif entityType == "buffer" then
 		bgTint = {r = 0.2, g = 0.6, b = 0.2, a = 0.9}
-	elseif baseName == "tank" then
-		bgTint = {r = 0.1, g = 0.1, b = 0.1, a = 0.8}
 	end
 	-------------------------------------------------------------------------------------
 	--left background
@@ -240,7 +217,7 @@ function lib_warehouse.buildSpriteLayer(baseName,entityType,unitSize,direction)
 			}
 		})
 	end
-	--Power Pole
+	--Power Pole - part of the wh because i cant make it display properly in front of the building
 	table.insert(layers,{
 				filename = "__nco-LongWarehouses__/graphics/entity/hr/addon-power-pole.png",
 				width = myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/hr/addon-power-pole.png"].width,
@@ -281,7 +258,6 @@ function lib_warehouse.checkEntityName(name)
 end
 --=================================================================================--
 function lib_warehouse.checkEntity(entity)
-	log("checking entity " .. entity.type)
 	if entity.type == "entity-ghost" then
 		return "entity-ghost", lib_warehouse.checkEntityName(entity.ghost_name)
 	else

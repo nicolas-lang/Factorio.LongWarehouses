@@ -4,9 +4,7 @@ local data_util = require("__nco-LongWarehouses__/lib/data_util")
 --===================================================================================
 --Register Tech
 --===================================================================================
---log(serpent.block( myGlobal.imageInfo, {comment = false, numformat = '%1.8g', compact = true } ))
 local techIcon = "__nco-LongWarehouses__/graphics/icons/tech-warehouses.png"
---log(myGlobal.imageInfo[techIcon])
 local whTech = {
 		type = "technology",
 		name = "nco-LongWarehouses",

@@ -1,5 +1,6 @@
 --log("warehouses-entity")
 local myGlobal = require("__nco-LongWarehouses__/lib/nco_data")
+local data_util = require("__nco-LongWarehouses__/lib/data_util")
 local lib_warehouse = require("__nco-LongWarehouses__/lib/lib_warehouse")
 -------------------------------------------------------------------------------------
 local function makeWarehouseProxy(unitSize,logisticType)
@@ -66,11 +67,8 @@ local function makeWarehouseProxy(unitSize,logisticType)
 	whProxEnt.animations.south.layers = util.table.deepcopy(mySpriteH)
 	whProxEnt.animations.west.layers = util.table.deepcopy(mySpriteV)
 	whProxEnt.animations.east.layers = util.table.deepcopy(mySpriteV)
-	--log("registering item")
 	data:extend({whProxItm})
-	--log("registering entity")
 	data:extend({whProxEnt})
-	--log("registering recipe")
 	data:extend({whProxRec})
 end
 -------------------------------------------------------------------------------------
@@ -142,10 +140,9 @@ local function makeWarehouse(unitSize,logisticType,subType)
 			circuit_wire_connection_point = circuit_connector_definitions["chest"].points,
 			circuit_connector_sprites = circuit_connector_definitions["chest"].sprites,
 			circuit_wire_max_distance = 0.001,
-			render_layer = "higher-object-under"
 		}
 	-------------------------------------------------------------------------------------
-	-- Entity: logistics ?
+	-- Entity: logistics properties
 	-------------------------------------------------------------------------------------
 	if logisticType ~= "normal" then
 		whEnt.type = "logistic-container"
@@ -171,20 +168,29 @@ local function makeWarehouse(unitSize,logisticType,subType)
 	--===================================================================================
 	--Register Warehouse
 	--===================================================================================
-	--log("registering item")
 	data:extend({whItm})
-	--log("registering entity")
 	data:extend({whEnt})
-	--log("registering recipe")
 	data:extend({whRec})
 end -- function makeWarehouse
 
 --===================================================================================
---Call WH Generator
+-- call WH Generator based on mod settings
 --===================================================================================
-myGlobal["whSizes"] = {2,4}
-local directions = {"h","v"}
+myGlobal["whSizes"] = {}
+for _, size in pairs(data_util.csv_split(settings.startup["wh-sizes"].value, ';')) do
+	local size = tonumber(data_util.trim(size))
+	if (
+			size
+		and	size < 32
+		and	not data_util.has_value (myGlobal["whSizes"], size)
+	)then
+		table.insert(myGlobal["whSizes"],size)
+	else
+		log("invalid size: " .. size)
+	end
+end
 -------------------------------------------------------------------------------------
+local directions = {"h","v"}
 for _, v1 in pairs(myGlobal["whSizes"]) do
 	makeWarehouseProxy(v1,"normal");
 	for _, v2 in pairs(directions) do
@@ -192,7 +198,18 @@ for _, v1 in pairs(myGlobal["whSizes"]) do
 	end
 end
 -------------------------------------------------------------------------------------
-local logistictypes = {"requester","storage","passive-provider","active-provider","buffer"}
+-- Logistic Warehouses
+-------------------------------------------------------------------------------------
+local logistictypes = {}
+if settings.startup["wh-enable-logistic"].value then
+	table.insert(logistictypes,"storage")
+	table.insert(logistictypes,"passive-provider")
+end
+if settings.startup["wh-enable-advanced-logistic"].value then
+	table.insert(logistictypes,"requester")
+	table.insert(logistictypes,"active-provider")
+	table.insert(logistictypes,"buffer")
+end
 for _, v1 in pairs(myGlobal["whSizes"]) do
 	for _, v2 in pairs(logistictypes) do
 		makeWarehouseProxy(v1,v2);

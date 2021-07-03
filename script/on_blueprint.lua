@@ -4,7 +4,6 @@ local data_util = require("__nco-LongWarehouses__/lib/data_util")
 -- On Blueprint Item Replace to Reset Item to Item-Proxy
 -------------------------------------------------------------------------------------
 local function on_blueprint(event)
-	-- debugMsg("on_blueprint")
 	local player = game.players[event.player_index]
 	local bp = player.blueprint_to_setup
 	if not bp or not bp.valid_for_read then
