@@ -1,7 +1,6 @@
 ﻿local myGlobal = require("__nco-LongWarehouses__/lib/nco_data")
 if mods["Krastorio2"] then
 	-------------------------------------------------------------------------------------
-	--[[
 	myGlobal.baseIngredients ={
 		{name="low-density-structure",	count=20,		limit=600,	val=1000000},
 		{name="plastic-bar",			count=20,		limit=400,	val=100000},
@@ -20,5 +19,4 @@ if mods["Krastorio2"] then
 		{name="advanced-circuit",		count=10,		limit=400,	val=1},
 	}
 	-------------------------------------------------------------------------------------
-	]]--
 end

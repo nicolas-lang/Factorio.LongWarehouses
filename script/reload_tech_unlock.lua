@@ -21,5 +21,4 @@ local function script_on_configuration_changed()
 	reload_tech_unlock("nco-LongWarehousesLogistics2")
 end
 -------------------------------------------------------------------------------------
-local es = defines.events
 script.on_configuration_changed( script_on_configuration_changed )

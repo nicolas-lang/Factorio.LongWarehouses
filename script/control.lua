@@ -3,7 +3,6 @@ local lib_warehouse = require("__nco-LongWarehouses__/lib/lib_warehouse")
 local data_util = require("__nco-LongWarehouses__/lib/data_util")
 local ghost_util = require("__nco-LongWarehouses__/script/ghost_util")
 local myControl = {}
-local _ -- lua style check needs throwaways to be declared
 -------------------------------------------------------------------------------------
 ghost_util.init(nil,nil,nil)
 -------------------------------------------------------------------------------------
