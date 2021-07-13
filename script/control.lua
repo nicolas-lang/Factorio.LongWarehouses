@@ -112,7 +112,6 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 		for _, entity in pairs(searchResult) do
 			pole.entity = entity
 			pole.entityType = "entity"
-			break
 		end
 	end
 	log(wh.entityType)
