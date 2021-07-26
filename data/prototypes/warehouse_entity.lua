@@ -2,12 +2,13 @@
 local myGlobal = require("__nco-LongWarehouses__/lib/nco_data")
 local data_util = require("__nco-LongWarehouses__/lib/data_util")
 local lib_warehouse = require("__nco-LongWarehouses__/lib/lib_warehouse")
+local whSizeScaling = 80
 -------------------------------------------------------------------------------------
 local function makeWarehouseProxy(unitSize,logisticType)
 	-------------------------------------------------------------------------------------
 	-- Configure Details
 	-------------------------------------------------------------------------------------
-	local whData = lib_warehouse.getWHData(unitSize,logisticType,1,"proxy")
+	local whData = lib_warehouse.getWHData(unitSize,logisticType,whSizeScaling,"proxy")
 	local whSizeA = whData.gridSize
 	local whSizeB = 2
 	log("registering warehouse " .. whData.whName)
@@ -24,7 +25,8 @@ local function makeWarehouseProxy(unitSize,logisticType)
 		result = whData.whName,
 		icons = lib_warehouse.getWHIcon(unitSize,logisticType),
 		subgroup = "cust-warehouse",
-		order = whData.sortOrder
+		order = whData.sortOrder,
+		localised_name = {"recipe-name.cust-warehouse",{"custom-strings.cust-warehouse-name-"..logisticType},whData.whSizeNameAdvanced}
 	}
 	-------------------------------------------------------------------------------------
 	local whProxItm = {
@@ -35,8 +37,11 @@ local function makeWarehouseProxy(unitSize,logisticType)
 			order = whData.sortOrder,
 			place_result = whData.whName,
 			stack_size = 5,
+			localised_name = {"item-name.cust-warehouse",{"custom-strings.cust-warehouse-name-"..logisticType},whData.whSizeNameAdvanced},
+			localised_description = {"item-description.cust-warehouse",whData.whSizeNameAdvanced, whData.whInvSize}
 		}
 	local whProxEnt = {
+		--should never be placed for more than 1 tick, unless it is a ghost
 		type = "pump",
 		name = whData.whName,
 		fast_replaceable_group = whData.whGroupName,
@@ -54,7 +59,9 @@ local function makeWarehouseProxy(unitSize,logisticType)
 		pictures = {picture = {}},
 		circuit_wire_connection_points = circuit_connector_definitions["pump"].points,
 		circuit_connector_sprites = circuit_connector_definitions["pump"].sprites,
-		circuit_wire_max_distance = 0.0001
+		circuit_wire_max_distance = 0.0001,
+		localised_name = {"item-name.cust-warehouse",{"custom-strings.cust-warehouse-name-"..logisticType},whData.whSizeNameAdvanced},
+		localised_description = {"item-description.cust-warehouse",whData.whSizeNameAdvanced, whData.whInvSize}
 	}
 	-------------------------------------------------------------------------------------
 	--===================================================================================
@@ -76,8 +83,8 @@ local function makeWarehouse(unitSize,logisticType,subType)
 	-------------------------------------------------------------------------------------
 	-- Configure Details
 	-------------------------------------------------------------------------------------
-	local whData = lib_warehouse.getWHData(unitSize,logisticType,80,subType)
-	local whProxy = lib_warehouse.getWHData(unitSize,logisticType,80,"proxy")
+	local whData = lib_warehouse.getWHData(unitSize,logisticType,whSizeScaling,subType)
+	local whProxy = lib_warehouse.getWHData(unitSize,logisticType,whSizeScaling,"proxy")
 	local whSizeA = whData.gridSize
 	local whSizeB = 1.999
 	--log("registering warehouse " .. whData.whName)
@@ -85,6 +92,7 @@ local function makeWarehouse(unitSize,logisticType,subType)
 	--Define Recipe
 	--===================================================================================
 	local whRec = {
+		--never used, just required as a dummy
 		type = "recipe",
 		hidden = "true",
 		enabled = "false",
@@ -102,6 +110,7 @@ local function makeWarehouse(unitSize,logisticType,subType)
 	--Define Item
 	--===================================================================================
 	local whItm = {
+			--never used, just required as a dummy
 			type = "item",
 			flags={
 				"hidden"
@@ -140,6 +149,8 @@ local function makeWarehouse(unitSize,logisticType,subType)
 			circuit_wire_connection_point = circuit_connector_definitions["chest"].points,
 			circuit_connector_sprites = circuit_connector_definitions["chest"].sprites,
 			circuit_wire_max_distance = 0.001,
+			localised_name = {"entity-name.cust-warehouse",{"custom-strings.cust-warehouse-name-"..logisticType},whData.whSizeNameAdvanced},
+			localised_description = {"entity-description.cust-warehouse"}
 		}
 	-------------------------------------------------------------------------------------
 	-- Entity: logistics properties

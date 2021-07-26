@@ -8,6 +8,8 @@ local techIcon = "__nco-LongWarehouses__/graphics/icons/tech-warehouses.png"
 local whTech = {
 		type = "technology",
 		name = "nco-LongWarehouses",
+		localised_name = {"technology-name.nco-longWarehouses"},
+		localised_description = {"technology-description.nco-longWarehouses"},
 		icon = techIcon,
 		icon_size = myGlobal.imageInfo[techIcon].width,
 		prerequisites = {
@@ -32,15 +34,18 @@ whTech.unit.ingredients = data_util.getResearchUnitIngredients("automated-rail-t
 whTech.unit.count = data_util.getResearchUnitCount("automated-rail-transportation")*2
 -------------------------------------------------------------------------------------
 whTechLogistic1.name = "nco-LongWarehousesLogistics1"
+whTechLogistic1.localised_name = {"technology-name.nco-longWarehousesLogistics1"}
+whTechLogistic1.localised_description = {"technology-description.nco-longWarehousesLogistics1"}
 whTechLogistic1.prerequisites = { "logistic-robotics", "nco-LongWarehouses"}
 whTechLogistic1.icon = "__nco-LongWarehouses__/graphics/icons/tech-warehouses-logistics.png"
-
 whTechLogistic1.unit.ingredients = data_util.getResearchUnitIngredients("logistic-robotics")
 whTechLogistic1.unit.count = data_util.getResearchUnitCount("logistic-robotics")*2
 -------------------------------------------------------------------------------------
 whTechLogistic2.name = "nco-LongWarehousesLogistics2"
+whTechLogistic2.localised_name = {"technology-name.nco-longWarehousesLogistics2"}
+whTechLogistic2.localised_description = {"technology-description.nco-longWarehousesLogistics2"}
 whTechLogistic2.prerequisites = {"logistic-system", "nco-LongWarehousesLogistics1"}
-whTechLogistic2.icon = "__nco-LongWarehouses__/graphics/icons/tech-warehouses-logistics.png"
+whTechLogistic2.icon = "__nco-LongWarehouses__/graphics/icons/tech-warehouses-logistics2.png"
 whTechLogistic2.unit.ingredients = data_util.getResearchUnitIngredients("logistic-system")
 whTechLogistic2.unit.count = data_util.getResearchUnitCount("logistic-system")*2
 -------------------------------------------------------------------------------------
@@ -55,5 +60,9 @@ for k,v in pairs(myGlobal.RegisteredWarehouses) do
 	end
 end
 data:extend({whTech})
-data:extend({whTechLogistic1})
-data:extend({whTechLogistic2})
+if settings.startup["wh-enable-logistic"].value then
+	data:extend({whTechLogistic1})
+end
+if settings.startup["wh-enable-advanced-logistic"].value then
+	data:extend({whTechLogistic2})
+end

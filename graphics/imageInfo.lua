@@ -17,6 +17,7 @@ myGlobal.imageInfo["__nco-LongWarehouses__/graphics/entity/hr/warehouse-v-buildi
 myGlobal.imageInfo["__nco-LongWarehouses__/graphics/icons/addon-power-pole.png"]={width=64, height=64}
 myGlobal.imageInfo["__nco-LongWarehouses__/graphics/icons/error.png"]={width=64, height=64}
 myGlobal.imageInfo["__nco-LongWarehouses__/graphics/icons/tech-warehouses-logistics.png"]={width=64, height=64}
+myGlobal.imageInfo["__nco-LongWarehouses__/graphics/icons/tech-warehouses-logistics2.png"]={width=64, height=64}
 myGlobal.imageInfo["__nco-LongWarehouses__/graphics/icons/tech-warehouses.png"]={width=64, height=64}
 myGlobal.imageInfo["__nco-LongWarehouses__/graphics/icons/warehouse-active-provider.png"]={width=64, height=64}
 myGlobal.imageInfo["__nco-LongWarehouses__/graphics/icons/warehouse-buffer.png"]={width=64, height=64}

@@ -17,8 +17,12 @@ end
 -------------------------------------------------------------------------------------
 local function script_on_configuration_changed()
 	reload_tech_unlock("nco-LongWarehouses")
-	reload_tech_unlock("nco-LongWarehousesLogistics1")
-	reload_tech_unlock("nco-LongWarehousesLogistics2")
+	if settings.startup["wh-enable-logistic"].value then
+		reload_tech_unlock("nco-LongWarehousesLogistics1")
+	end
+	if settings.startup["wh-enable-advanced-logistic"].value then
+		reload_tech_unlock("nco-LongWarehousesLogistics2")
+	end
 end
 -------------------------------------------------------------------------------------
 script.on_configuration_changed( script_on_configuration_changed )

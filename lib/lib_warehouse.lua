@@ -6,6 +6,7 @@ function lib_warehouse.getWHData(unitSize,whType,sizeScaling,suffix)
 	local gridSize = unitSize*6 + math.max(0,unitSize-1)
 	local whNameBase = "cust-warehouse"
 	local whSizeName = string.format("%03d" , gridSize)
+	local whSizeNameAdvanced = string.format("%d-%d" ,unitSize,gridSize)
 	local whTypeName = whType
 	local whGroupName = string.format("%s-%s" , whNameBase , whSizeName)
 	local whName = string.format("%s-%s-%s", whNameBase, whTypeName, whSizeName)
@@ -22,7 +23,7 @@ function lib_warehouse.getWHData(unitSize,whType,sizeScaling,suffix)
 	 -- I dont know why this is, but I take his word for it.
 	local whInvSize = math.min(unitSize * sizeScaling,540)
 	local whHealth = 500 + unitSize * 250
-	return {whNameBase = whNameBase, whSizeName=whSizeName, whTypeName=whTypeName, whGroupName=whGroupName, whName=whName, gridSize=gridSize, whInvSize=whInvSize, whHealth=whHealth,sortOrder=sortOrder}
+	return {whNameBase = whNameBase, whSizeName=whSizeName,whSizeNameAdvanced=whSizeNameAdvanced, whTypeName=whTypeName, whGroupName=whGroupName, whName=whName, gridSize=gridSize, whInvSize=whInvSize, whHealth=whHealth,sortOrder=sortOrder}
 end
 -------------------------------------------------------------------------------------
 function lib_warehouse.getWHIcon(unitSize,whType)
