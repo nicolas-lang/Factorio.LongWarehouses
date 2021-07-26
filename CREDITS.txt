@@ -1,13 +1,11 @@
 ---------------
 Mod dev team:
 
-- Karoschl
-	Code
-- LordNausea
-	Testing
-  
----------------
-Thanks also to:
+- Karoschl: SourceCode
+- LordNausea: Testing
 
-- Krastor and Linver 
-  for give permission to use sprites from K2
+---------------
+Additional Thanks to:
+
+- Krastor and Linver for granting permission to use sprites from K2
+- A huge thanks to Mernom and Test447 from Earendel’s discord for their help with modding related issues

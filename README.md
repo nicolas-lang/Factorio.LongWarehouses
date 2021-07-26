@@ -1,5 +1,5 @@
 # Factorio: Long warehouses
-When playing Factorio with Logistic Train Network enabled, I never liked the micromanagement of balancing the individual chests with the exact amount of resources for each cargo-waggon. Especially with a large base and a mod-heavy game the required circuits and entities introduced a UPS sink that felt unnecessary and wasn’t even based on a real-world issue.
+When playing Factorio with Logistic Train Network enabled, I never liked the micro management of balancing the individual chests with the exact amount of resources for each cargo waggon. Especially with a large base and a mod-heavy game the required circuits and entities introduced a UPS sink that felt unnecessary.
 
 This mod adds larger warehouses (with configurable sizes) to simplify building better, simpler train stations.
 
