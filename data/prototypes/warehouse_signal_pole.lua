@@ -1,41 +1,42 @@
 ﻿local myGlobal = require("__nco-LongWarehouses__/lib/nco_data")
 local poleIcon = "__nco-LongWarehouses__/graphics/icons/addon-power-pole.png"
+
 local signalPole = {
-	type = "electric-pole",
+	type = "programmable-speaker",
 	name = "warehouse-signal-pole",
-	supply_area_distance = 0.1,
 	collision_box = {{-0.01, -0.01}, {0.01, 0.01}},
 	collision_mask = {"colliding-with-tiles-only"},
 	selection_box = {{-0.65,-0.65},{0.65,0.65}},
 	selection_priority = 150,
-	connection_points = {
-		{
-			shadow = {
-				copper = {0,0},
-				green = {
-					 1.9-0.1
-					,0.1-0.1
-				},
-				red = {
-					 1.9-0.25
-					, 0.1-0
-				}
+	energy_source = {
+		type = "void",
+		usage_priority = "secondary-input",
+		render_no_power_icon = false
+	},
+	energy_usage_per_tick = "1W",
+	maximum_polyphony = 0,
+	instruments = { },
+	circuit_wire_connection_point = {
+		shadow = {
+			green = {
+				 1.9-0.1
+				,0.1-0.1
 			},
-			wire = {
-				copper = {
-					 0
-					,-1.4
-				},
-				green = {
-					 -0.55
-					,-1.8
-				},
-				red = {
-					 0.55
-					,-1.8
-				}
+			red = {
+				 1.9-0.25
+				, 0.1-0
 			}
 		},
+		wire = {
+			green = {
+				 -0.55
+				,-1.8
+			},
+			red = {
+				 0.55
+				,-1.8
+			}
+		}
 	},
 	corpse = "small-electric-pole-remnants",
 	drawing_box = { {-0.5,-1.5},{0.5,0.5} },
@@ -55,9 +56,9 @@ local signalPole = {
 	max_health = 1000,
 	destructible = false,
 	mineable = false,
-	maximum_wire_distance = 15,
-	draw_copper_wires = false,
-	pictures = {
+	circuit_wire_max_distance = 15,
+	draw_copper_wires = true,
+	sprite = {
 		layers = {
 			{
 				direction_count = 1,
@@ -71,11 +72,12 @@ local signalPole = {
 	}
 }
 
-signalPole.radius_visualisation_picture = util.table.deepcopy(data.raw["electric-pole"]["small-electric-pole"].radius_visualisation_picture)
+--signalPole.radius_visualisation_picture = util.table.deepcopy(data.raw["electric-pole"]["small-electric-pole"].radius_visualisation_picture)
 signalPole.resistances = util.table.deepcopy(data.raw["electric-pole"]["small-electric-pole"].resistances)
 signalPole.vehicle_impact_sound = util.table.deepcopy(data.raw["electric-pole"]["small-electric-pole"].vehicle_impact_sound)
-signalPole.water_reflection = util.table.deepcopy(data.raw["electric-pole"]["small-electric-pole"].water_reflection)
-signalPole.damaged_trigger_effect = util.table.deepcopy(data.raw["electric-pole"]["small-electric-pole"].damaged_trigger_effect)
+signalPole.operable = false
+--signalPole.water_reflection = util.table.deepcopy(data.raw["electric-pole"]["small-electric-pole"].water_reflection)
+--signalPole.damaged_trigger_effect = util.table.deepcopy(data.raw["electric-pole"]["small-electric-pole"].damaged_trigger_effect)
 data:extend({signalPole})
 
 local signalPoleItm = {

@@ -9,7 +9,8 @@ ghost_util.init(nil,nil,nil)
 -- All the things to control the things
 -------------------------------------------------------------------------------------
 function myControl.validate_warehouses()
-	game.print("myControl.validate_warehouses", {r = 0.5, g = 0.5, b = 0.25, a = 0} )
+	game.print({"custom-strings.info-validate-warehouses"}, {r = 0.75, g = 0.5, b = 0.25, a = 0} )
+	log({"custom-strings.info-validate-warehouses"})
 	myControl.validate_warehouse_member("warehouse-signal-pole")
 	for _, whBase in pairs(myGlobal["RegisteredWarehouses"]) do
 		myControl.validate_warehouse_member(whBase.."-proxy")
@@ -66,16 +67,14 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 		end
 	end
 	if not wh.entity and pole.entity then
-		-- "warehouse-signal-pole" neds to be part of a composite-warehouse-entity-group
-		game.print("removed orphaned warehouse connector", {r = 0.75, g = 0.5, b = 0.25, a = 0} )
-		log("removed orphaned warehouse connector")
+		-- "warehouse-signal-pole" needs to be part of a composite-warehouse-entity-group
+		game.print({"custom-strings.warning-orphaned-connector"}, {r = 0.75, g = 0.5, b = 0.25, a = 0} )
+		log({"custom-strings.warning-orphaned-connector"})
 		pole.entity.destroy()
 		return
 	end
 	if deconstructing and pole.entity then
-		-- we are deconstructing
-		-- the warehouse is handled by game logic
-		-- we just need to take care of the custom stuff
+		-- we are deconstructing, the warehouse is handled by game logic, we just need to take care of the custom stuff
 		pole.entity.destroy()
 		return
 	end
@@ -106,7 +105,7 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 	end
 
 	if wh.entityType == 'entity' and pole.entityType == 'entity-ghost' then
-		-- ghost state of warehouse and pole is synchronized, the pole is never manually built, but rather scripted
+		-- ghost state of warehouse and pole is synchronized, the pole is never built, but rather script-revived when the warehouse is constructed
 		pole.entity.revive()
 		searchResult = surface.find_entities_filtered({force = force, position = position, name = "warehouse-signal-pole", radius = 0.001})
 		for _, entity in pairs(searchResult) do
@@ -118,8 +117,8 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 	log(wh.whType)
 	if wh.entityType == 'entity-ghost' and data_util.has_value({"horizontal","vertical"}, wh.whType) then
 		-- a wh ghost is always a proxy and never a direction typed wh (this only happens with strg-z, which also breakes pole connections, but there is no fix)
-		game.print("warning, using undo on a warehouse will break wire connections of the warehouse connector to other entities", {r = 0.75, g = 0.5, b = 0.25, a = 0} )
-		log("warning, using undo will break wire connections of the warehouse connector")
+		game.print({"custom-strings.warning-undo"}, {r = 0.75, g = 0.5, b = 0.25, a = 0} )
+		log({"custom-strings.warning-undo"})
 		local newEntityName = string.gsub(wh.entity.ghost_name , "%-[hv]$", "-proxy")
 		local direction
 		if wh.whType == "vertical" then
@@ -251,6 +250,16 @@ function myControl.on_entity_died(event)
 	myControl.validate_warehouse(entity.position,entity.force,entity.surface,false)
 end
 -------------------------------------------------------------------------------------
+-- On GUI opened
+-------------------------------------------------------------------------------------
+function myControl.on_gui_opened(event)
+	local entity = event.entity
+	if not entity or not entity.valid or entity.name ~= 'warehouse-signal-pole' or not event.player_index then
+		return
+	end
+	game.get_player(event.player_index).opened = nil
+end
+-------------------------------------------------------------------------------------
 -- On Entity Ghost Removed
 -------------------------------------------------------------------------------------
 function myControl.on_ghost_removed(data)
@@ -263,12 +272,14 @@ ghost_util.register_callback(myControl.on_ghost_removed)
 -------------------------------------------------------------------------------------
 commands.add_command("wh_check", nil, function(_)
 	myControl.validate_warehouses()
-	game.print("called /wh_check", {r = 0.75, g = 0.5, b = 0.25, a = 0} )
+	game.print({"custom-strings.info-called-wh_check"}, {r = 0.75, g = 0.5, b = 0.25, a = 0} )
+		log({"custom-strings.info-called-wh_check"})
 end)
 -------------------------------------------------------------------------------------
 -- Register Hooks
 -------------------------------------------------------------------------------------
 local es = defines.events
+script.on_event({es.on_gui_opened}, myControl.on_gui_opened)
 script.on_event({es.on_player_joined_game}, myControl.validate_warehouses)
 script.on_event({es.on_built_entity, es.on_robot_built_entity, es.script_raised_built, es.script_raised_revive}, myControl.on_built)
 script.on_event({es.on_robot_mined_entity, es.on_player_mined_entity}, myControl.on_entity_removed)
