@@ -8,7 +8,7 @@ jobs:
       - name: lint
         uses: Roang-zero1/factorio-mod-luacheck@master
         env:
-          LUACHECKRC_URL: https://raw.githubusercontent.com/Nexela/Factorio-luacheckrc/master/.luacheckrc
+          LUACHECKRC_URL: https://raw.githubusercontent.com/Nexela/Factorio-luacheckrc/1.1.0/.luacheckrc
   release:
     runs-on: ubuntu-latest
     needs: lint
@@ -30,4 +30,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           args: dist/
+      - name: Factorio release
+        uses: nicolas-lang/factorio-create-release-action@master
+        with:
+          factorio_password: ${{ secrets.FACTORIO_PASSWORD }}
+          factorio_user: ${{ secrets.FACTORIO_USER }}
 
