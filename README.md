@@ -1,22 +1,23 @@
-# Factorio.ModTemplate
-Template for automated mod deployment using Github Actions when a tagged commit is pushed
+# Factorio: Long warehouses
+When playing Factorio with Logistic Train Network enabled, I never liked the micromanagement of balancing the individual chests with the exact amount of resources for each cargo-waggon. Especially with a large base and a mod-heavy game the required circuits and entities introduced a UPS sink that felt unnecessary and wasn’t even based on a real-world issue.
 
-## Inputs (Github secrets)
+This mod adds larger warehouses (with configurable sizes) to simplify building better, simpler train stations.
 
-### `factorio_user`
+It is kind of a hack since Factorio does not allow you to rotate chests... 
+- you place a pump that looks like a warehouse
+- then the mod replaces it in the background with one of the two possible warehouses
+- replacing also introduces some circuit related issues that are handled by creating a composite entity with a dedicated connection pole
+- which in return requires additional hacks to ensure the composite entity is set up correctly all the time
 
-**Required** User that will be used to authenticate to the Factorio mod-portal.
-
-### `factorio_password`
-
-**Required** Password that will be used to authenticate to the Factorio mod-portal.
+Feel free to review and improve my code.
+##Known Issues
+- Fast replace, Ctrl-Z, and chest-upgrade is broken
+- I tried to move around the limitations of the factorio api, it should work like 95% of the time...
+- I appreciate help for the remaining 5%
 
 ## Acknowledgements
 
-Actions based on:
-- [Roang-zero1 Actions](https://github.com/Roang-zero1)
+- **Huge thanks to Mernom and Test447 from Earendel's discord for their help with modding related issues**
+- [Github actions based on Roang-zero1 Actions](https://github.com/Roang-zero1)
+- [Logistic Train Network is a mod by Optera](https://mods.factorio.com/mods/Optera/LogisticTrainNetwork)
 
-Which are  based on:
-- [Nexelas Mods](https://github.com/Nexela)
-- [GitHub Action to automatically publish to the Factorio mod portal](https://github.com/shanemadden/factorio-mod-portal-publish)
-- Shane Madden (Nymbia)
