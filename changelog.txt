@@ -1,4 +1,8 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+  Bugfixes:
+    - Fix for missing check in compatibility scripts (https://github.com/nicolas-lang/Factorio.LongWarehouses/issues/1)
+---------------------------------------------------------------------------------------------------
 Version: 0.2.1
   Major Features:
     - Complete refactoring
