@@ -17,6 +17,7 @@ Feel free to review and improve my code.
 
 ## Acknowledgements
 
+- Images are based on medium warehouses from [Krastorio 2](https://mods.factorio.com/mod/Krastorio2), please check the related sub-licence
 - **Huge thanks to Mernom and Test447 from Earendel's discord for their help with modding related issues**
 - [Github actions based on Roang-zero1 Actions](https://github.com/Roang-zero1)
 - [Logistic Train Network is a mod by Optera](https://mods.factorio.com/mods/Optera/LogisticTrainNetwork)
