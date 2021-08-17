@@ -173,7 +173,7 @@ function myControl.on_built(event)
 	end
 	-- do all the things
 	if baseType == "entity" and entityName == "proxy" then
-		myControl.on_built_proxy(built_entity)
+		myControl.on_built_proxy(built_entity,event.tags)
 	end
 	-- finalize all the other things
 	if data_util.has_value({"horizontal","vertical", "proxy", "pole"}, entityName) then
@@ -183,7 +183,8 @@ end
 -------------------------------------------------------------------------------------
 -- On WhProxy Build
 -------------------------------------------------------------------------------------
-function myControl.on_built_proxy(proxy)
+function myControl.on_built_proxy(proxy,tags)
+	--log("on_built_proxy")
 	local proxyData = {
 		surface = proxy.surface,
 		position = proxy.position,
@@ -205,6 +206,40 @@ function myControl.on_built_proxy(proxy)
 		force = proxyData.force,
 		player = proxyData.last_user
 	}
+	--set inventory configuration from blueprint tags
+	searchResult = proxyData.surface.find_entities_filtered({force = proxyData.force, name = proxyData.structure_name, position = proxyData.position, radius = 0.001})
+	--log(#searchResult)
+	for _, wh in pairs(searchResult) do
+		--log("configuring "..wh.name)
+		local whPrototype = game.entity_prototypes[wh.name]
+		--locked slots
+		if tags and tags.bar then
+			--log("configuring locked slots")
+			wh.get_inventory(defines.inventory.chest).set_bar(tags.bar)
+		end
+		-- requests/buffer-requests
+		if (tags and tags.request_slots)then
+			if (whPrototype.type == "logistic-container" and data_util.has_value({"requester","buffer"},whPrototype.logistic_mode))then
+				--log("configuring request slots")
+				for _, request_slot in pairs(data_util.csv_split(tags.request_slots,";")) do
+					local slotInfo = data_util.csv_split(request_slot,":")
+					wh.set_request_slot({name=slotInfo[2], count=tonumber(slotInfo[3])}, slotInfo[1])
+				end
+			else
+				game.print({"custom-strings.warning-type-changed"}, {r = 0.75, g = 0.5, b = 0.25, a = 0} )
+			end
+		end
+		-- logistic filter
+		if (tags and tags.storage_filter) then
+			if (whPrototype.type == "logistic-container" and whPrototype.logistic_mode == "storage")then
+				--log("configuring storage filter")
+				local slotInfo = data_util.csv_split(tags.storage_filter,":")
+				wh.storage_filter  = game.item_prototypes[slotInfo[2]]
+			else
+				game.print({"custom-strings.warning-type-changed"}, {r = 0.75, g = 0.5, b = 0.25, a = 0} )
+			end
+		end
+	end
 	-- remainder of composite entity is built in validation called by on_built
 end
 
