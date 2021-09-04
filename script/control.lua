@@ -207,7 +207,7 @@ function myControl.on_built_proxy(proxy,tags)
 		player = proxyData.last_user
 	}
 	--set inventory configuration from blueprint tags
-	searchResult = proxyData.surface.find_entities_filtered({force = proxyData.force, name = proxyData.structure_name, position = proxyData.position, radius = 0.001})
+	local searchResult = proxyData.surface.find_entities_filtered({force = proxyData.force, name = proxyData.structure_name, position = proxyData.position, radius = 0.001})
 	--log(#searchResult)
 	for _, wh in pairs(searchResult) do
 		--log("configuring "..wh.name)

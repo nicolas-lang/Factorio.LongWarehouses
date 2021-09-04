@@ -1,7 +1,11 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.2.3
+Version: 0.2.4
   Major Features:
     - Added Support for logistic-requests, logistic-storage-filters and slot-locking (https://github.com/nicolas-lang/Factorio.LongWarehouses/issues/2)
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+  Changes:
+    - Test Release for 0.2.4
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.2
   Bugfixes:
