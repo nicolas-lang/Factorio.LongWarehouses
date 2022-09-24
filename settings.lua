@@ -19,5 +19,12 @@ data:extend({
 		order = "C",
 		setting_type = "startup",
 		default_value = false,
+	},
+	{
+		type = "bool-setting",
+		name = "wh-validate-on-join",
+		order = "D",
+		setting_type = "startup",
+		default_value = true,
 	}
 })

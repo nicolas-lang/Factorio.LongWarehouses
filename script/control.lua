@@ -295,6 +295,16 @@ function myControl.on_gui_opened(event)
 	game.get_player(event.player_index).opened = nil
 end
 -------------------------------------------------------------------------------------
+-- On Player Joined
+-------------------------------------------------------------------------------------
+function myControl.on_player_joined(_)
+	if settings.startup["wh-validate-on-join"].value then
+		myControl.validate_warehouses()
+	else
+		game.print({"custom-strings.warning-validation-skipped"}, {r = 0.75, g = 0.5, b = 0.25, a = 0} )
+	end
+end
+-------------------------------------------------------------------------------------
 -- On Entity Ghost Removed
 -------------------------------------------------------------------------------------
 function myControl.on_ghost_removed(data)
@@ -315,7 +325,7 @@ end)
 -------------------------------------------------------------------------------------
 local es = defines.events
 script.on_event({es.on_gui_opened}, myControl.on_gui_opened)
-script.on_event({es.on_player_joined_game}, myControl.validate_warehouses)
+script.on_event({es.on_player_joined_game}, myControl.on_player_joined)
 script.on_event({es.on_built_entity, es.on_robot_built_entity, es.script_raised_built, es.script_raised_revive}, myControl.on_built)
 script.on_event({es.on_robot_mined_entity, es.on_player_mined_entity}, myControl.on_entity_removed)
 script.on_event({es.on_entity_died}, myControl.on_entity_died)
