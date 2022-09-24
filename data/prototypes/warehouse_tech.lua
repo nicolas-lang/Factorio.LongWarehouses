@@ -50,7 +50,7 @@ whTechLogistic2.unit.ingredients = data_util.getResearchUnitIngredients("logisti
 whTechLogistic2.unit.count = data_util.getResearchUnitCount("logistic-system")*2
 -------------------------------------------------------------------------------------
 for k,v in pairs(myGlobal.RegisteredWarehouses) do
-	log(v.name)
+	--log(v.name)
 	if v.whType == "normal" then
 		table.insert(whTech.effects,{type = "unlock-recipe",recipe = v.name})
 	elseif v.whType == "storage" or v.whType == "passive-provider" then

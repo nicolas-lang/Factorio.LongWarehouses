@@ -113,8 +113,8 @@ function myControl.validate_warehouse(position,force,surface,deconstructing)
 			pole.entityType = "entity"
 		end
 	end
-	log(wh.entityType)
-	log(wh.whType)
+	--log(wh.entityType)
+	--log(wh.whType)
 	if wh.entityType == 'entity-ghost' and data_util.has_value({"horizontal","vertical"}, wh.whType) then
 		-- a wh ghost is always a proxy and never a direction typed wh (this only happens with strg-z, which also breakes pole connections, but there is no fix)
 		game.print({"custom-strings.warning-undo"}, {r = 0.75, g = 0.5, b = 0.25, a = 0} )
@@ -158,7 +158,7 @@ function myControl.on_built(event)
 	local force = built_entity.force
 	local surface = built_entity.surface
 	local baseType, entityName = lib_warehouse.checkEntity(built_entity)
-	log(baseType .. "::" .. (entityName or ""))
+	--log(baseType .. "::" .. (entityName or ""))
 	if baseType == "entity-ghost" and entityName == "proxy" then
 		-- manage ghost related pseudo events
 		ghost_util.register_ghost(built_entity)

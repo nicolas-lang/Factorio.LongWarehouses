@@ -239,7 +239,7 @@ function lib_warehouse.buildSpriteLayer(baseName,entityType,unitSize,direction)
 end
 --=================================================================================--
 function lib_warehouse.checkEntityName(name)
-	log("checking name " .. name)
+	--log("checking name " .. name)
 	if string.find(name, "^cust%-warehouse%-.+%-%d%d%d%-proxy$") then
 		return "proxy"
 	end
