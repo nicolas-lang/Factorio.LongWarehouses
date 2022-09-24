@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+  Major Features:
+    - Added flag to disable warehouse validation on player join (https://github.com/nicolas-lang/Factorio.LongWarehouses/issues/5)
+    - Removed some debug messages (https://github.com/nicolas-lang/Factorio.LongWarehouses/issues/4)
+---------------------------------------------------------------------------------------------------
 Version: 0.2.4
   Major Features:
     - Added Support for logistic-requests, logistic-storage-filters and slot-locking (https://github.com/nicolas-lang/Factorio.LongWarehouses/issues/2)
