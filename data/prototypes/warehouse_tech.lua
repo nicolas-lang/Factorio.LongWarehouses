@@ -1,4 +1,5 @@
-﻿log("warehouses-tech")
+﻿--log("warehouses-tech")
+local util = require("util")
 local myGlobal = require("__nco-LongWarehouses__/lib/nco_data")
 local data_util = require("__nco-LongWarehouses__/lib/data_util")
 --===================================================================================

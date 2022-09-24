@@ -1,4 +1,5 @@
-﻿local myGlobal = require("__nco-LongWarehouses__/lib/nco_data")
+﻿local util = require("util")
+local myGlobal = require("__nco-LongWarehouses__/lib/nco_data")
 local poleIcon = "__nco-LongWarehouses__/graphics/icons/addon-power-pole.png"
 
 local signalPole = {

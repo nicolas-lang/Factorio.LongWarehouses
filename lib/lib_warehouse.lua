@@ -1,4 +1,5 @@
 ﻿local lib_warehouse = {}
+local util = require("util")
 local myGlobal = require("__nco-LongWarehouses__/lib/nco_data")
 --=================================================================================--
 function lib_warehouse.getWHData(unitSize,whType,sizeScaling,suffix)
