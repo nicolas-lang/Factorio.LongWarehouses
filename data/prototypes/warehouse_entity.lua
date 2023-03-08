@@ -3,7 +3,7 @@ local util = require("util")
 local myGlobal = require("__nco-LongWarehouses__/lib/nco_data")
 local data_util = require("__nco-LongWarehouses__/lib/data_util")
 local lib_warehouse = require("__nco-LongWarehouses__/lib/lib_warehouse")
-local whSizeScaling = 80
+local whSizeScaling = settings.startup["wh-wagon-size"].value * settings.startup["wh-storage-multiplier"].value
 -------------------------------------------------------------------------------------
 local function makeWarehouseProxy(unitSize,logisticType)
 	-------------------------------------------------------------------------------------
