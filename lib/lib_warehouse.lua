@@ -20,9 +20,13 @@ function lib_warehouse.getWHData(unitSize,whType,sizeScaling,suffix)
 	if suffix then
 		whName = whName .. "-" .. suffix
 	end
-	 -- Factorio team member "Earendal" mentions that containers >540 units have a huge ups issue.
-	 -- I dont know why this is, but I take his word for it.
-	local whInvSize = math.min(unitSize * sizeScaling,540)
+
+	-- limit to the technical possible size
+	local whInvSize = math.min(unitSize * sizeScaling, 65535)
+
+	if settings.startup["wh-limit-chest-size"].value then
+		whInvSize = math.min(whInvSize, 540)
+	end
 	local whHealth = 500 + unitSize * 250
 	return {whNameBase = whNameBase, whSizeName=whSizeName,whSizeNameAdvanced=whSizeNameAdvanced, whTypeName=whTypeName, whGroupName=whGroupName, whName=whName, gridSize=gridSize, whInvSize=whInvSize, whHealth=whHealth,sortOrder=sortOrder}
 end

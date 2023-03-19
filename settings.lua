@@ -26,5 +26,26 @@ data:extend({
 		order = "D",
 		setting_type = "startup",
 		default_value = true,
-	}
+	},
+	{
+		type = "int-setting",
+		name = "wh-wagon-size",
+		order = "E",
+		setting_type = "startup",
+		default_value = 40,
+	},
+	{
+		type = "int-setting",
+		name = "wh-storage-multiplier",
+		order = "F",
+		setting_type = "startup",
+		default_value = 2,
+	},
+	{
+		type = "bool-setting",
+		name = "wh-limit-chest-size",
+		order = "G",
+		setting_type = "startup",
+		default_value = true,
+	},
 })
