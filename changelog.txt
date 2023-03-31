@@ -1,22 +1,33 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.6
+  Date: 2023-04-01
+  Changes:
+    - Update translations from Crowdin (Ukrainian)
+    - Made container size more configurable (PR by krissi https://github.com/nicolas-lang/Factorio.LongWarehouses/pull/8 )
+---------------------------------------------------------------------------------------------------
 Version: 0.2.5
+  Date: 2021-09-24
   Major Features:
     - Added flag to disable warehouse validation on player join (https://github.com/nicolas-lang/Factorio.LongWarehouses/issues/5)
     - Removed some debug messages (https://github.com/nicolas-lang/Factorio.LongWarehouses/issues/4)
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.4
+  Date: 2021-09-04
   Major Features:
     - Added Support for logistic-requests, logistic-storage-filters and slot-locking (https://github.com/nicolas-lang/Factorio.LongWarehouses/issues/2)
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.3
+  Date: 2021-08-17
   Changes:
     - Test Release for 0.2.4
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.2
+  Date: 2021-06-29
   Bugfixes:
     - Fix for missing check in compatibility scripts (https://github.com/nicolas-lang/Factorio.LongWarehouses/issues/1)
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.1
+  Date: 2021-06-26
   Major Features:
     - Complete refactoring
     - Changed Circuit connector logic to use composite entitys
@@ -24,9 +35,11 @@ Version: 0.2.1
     - Split Tanks into their own mod
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
+  Date: 2021-05-01
   Major Features:
     - Pre-Release
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
+  Date: 2021-04-01
   Major Features:
     - Initial release.
